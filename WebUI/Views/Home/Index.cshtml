@@ -1,0 +1,97 @@
+﻿@using Entities.Concrete
+@{
+    ViewData["Title"] = "Softinny Task";
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+</head>
+<body>
+    @*Product Add Form*@
+
+    @*Product Name*@
+    <div class="mb-3">
+        <label for="productNameFormControl" class="form-label">Ürün Adı</label>
+        <input type="text" class="form-control" id="productNameFormControl" placeholder="Ülker Çikolatalı Gofret">
+    </div>
+
+    @*Product Purchase Price*@
+    <div class="mb-3">
+        <label for="purchasePriceFormControl" class="form-label">Alış Fiyatı</label>
+        <input type="number" class="form-control" id="purchasePriceFormControl" placeholder="123.123">
+    </div>
+
+
+    @*Product Selling Price*@
+    <div class="mb-3">
+        <label for="sellingPriceFormControl" class="form-label">Satış Fiyatı</label>
+        <input type="number" class="form-control" id="sellingPriceFormControl" placeholder="123.123">
+    </div>
+
+
+    @*Product Description*@
+    <div class="mb-3">
+        <label for="productDescriptionFormControl" class="form-label">Ürün Açıklaması</label>
+        <textarea class="form-control" id="productDescriptionFormControl" rows="3"></textarea>
+    </div>
+
+    @*Product Stock Amount*@
+    <div class="mb-3">
+        <label for="stockAmountFormControl" class="form-label">Stok</label>
+        <input type="number" class="form-control" id="stockAmountFormControl" placeholder="123">
+    </div>
+
+    @*Shipping Company*@
+    <select id="shippingCompanyFormControl" class="form-select" aria-label="Kargo Şirketi">
+        <option selected>Kargo Şirketi Seçiniz</option>
+        <option value="1">Aras Kargo</option>
+        <option value="2">Yurtiçi Kargo</option>
+        <option value="3">PTT</option>
+    </select>
+
+    @*Add new line and Add product buttons*@
+    <button id="productAddButton" type="button" class="col-md-5 btn btn-primary">ÜRÜNÜ EKLE</button>
+    <button id="addLineButton" type="button" class="col-md-5 btn btn-secondary">SATIR EKLE</button>
+</body>
+</html>
+
+
+<script>
+    $("#productAddButton").on("click", function() {
+
+        var name = $("#productNameFormControl").val();
+        var purchasePrice = $("#purchasePriceFormControl").val();
+        var sellingPrice = $("#sellingPriceFormControl").val();
+        var description = $("#productDescriptionFormControl").val();
+        var stockAmount = $("#stockAmountFormControl").val();
+        var shippingCompany = $("#shippingCompanyFormControl").val();
+        var product = {
+            Name: name,
+            PurchasePrice: purchasePrice,
+            SellingPrice: sellingPrice,
+            Description: description,
+            StockAmount: stockAmount,
+            ShippingDetail: shippingCompany
+        }
+
+        $.ajax({
+            url: "/Home/AddProduct",
+            method: "POST",
+            data: product,
+            success: function(product) {
+                alert("added");
+            },
+            error: function(err) {
+                alert("error");
+            }
+        })
+
+    })
+</script>
