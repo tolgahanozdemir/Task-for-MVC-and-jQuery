@@ -1,5 +1,4 @@
 ﻿using DataAccess.Abstract;
-using EFCore.BulkExtensions;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Z.BulkOperations;
 
 namespace DataAccess.Concrete
 {
@@ -20,11 +20,11 @@ namespace DataAccess.Concrete
                 context.SaveChanges();
             }
         }
-        public void BulkAdd(List<Product> product)
+        public void BulkAdd(List<Product> product,Action<BulkOperation>? options = null)
         {
             using (var context = new TaskContext())
             {
-                context.BulkInsert(product);
+                context.BulkInsert(product, options);
             }
         }
 

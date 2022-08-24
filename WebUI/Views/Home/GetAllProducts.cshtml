@@ -60,7 +60,7 @@
             success: function(data) {
                 console.log(data)
                 for (var i = 0; i < data.length; i++) {
-                    $('tbody').append(`<tr> <td>${i}</td> <td>${data[i].name}</td> <td>${data[i].purchasePrice}</td> <td>${data[i].sellingPrice}</td> <td>${data[i].description}</td> <td>${data[i].stockAmount}</td> <td>${data[i].shippingDetail}</td></tr>`)
+                    $('tbody').append(`<tr> <td>${(i+1)}</td> <td>${data[i].name}</td> <td>${data[i].purchasePrice}</td> <td>${data[i].sellingPrice}</td> <td>${data[i].description}</td> <td>${data[i].stockAmount}</td> <td>${data[i].shippingDetail}</td></tr>`)
                 }
             }
         })

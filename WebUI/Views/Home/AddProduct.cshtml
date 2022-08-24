@@ -1,0 +1,118 @@
+﻿@using Entities.Concrete
+@{
+    ViewData["Title"] = "Softinny Task";
+}
+
+
+@section Header{
+
+}
+
+    <div id="root">
+        <form method="post" action="/Home/AddProduct">
+
+            <div class="container mt-5">
+                <div class="row d-flex justify-content-center productRow my-5" data-row-id="1">
+                    <div class="col-md-8 mb-3">
+                        <label> Ürün Adı</label>
+                        <div class="form-group">
+                            <input type="text" name="ProductNames[]" placeholder="Ürün Adı Giriniz" class="form-control" required />
+
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label> Alış Fiyatı </label>
+                        <div class="form-group">
+                            <input type="text" name="PurchasePrices[]" placeholder="Ürün Adı Giriniz" class="form-control" required />
+
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label> Satış Fiyatı </label>
+                        <div class="form-group">
+                            <input type="text" name="SalePrices[]" placeholder="Ürün Adı Giriniz" class="form-control" required />
+
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label> Ürün Açıklaması </label>
+                        <div class="form-group">
+                            <textarea name="Descriptions[]" placeholder="Ürün Adı Giriniz" class="form-control" required></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label> Stok Adeti </label>
+                        <div class="form-group">
+                            <input type="text" name="Stocks[]" placeholder="Ürün Adı Giriniz" class="form-control" required />
+
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label> Kargo Şirketi </label>
+                        <div class="form-group">
+                            <select placeholder="Ürün Adı Giriniz" name="CargoCompanyIds[]" class="form-control" required>
+                                <option value="1">Aras</option>
+                                <option value="2">MNG</option>
+                                <option value="3">UPS</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="btn btn-outline-danger deleteRow" style="display:none" data-row-id="1">
+                        Satır Sil
+                    </div>
+
+
+                    <hr />
+                </div>
+                <div class="row  d-flex justify-content-end">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-outline-primary submit" id="submit">
+                                Kaydet
+                            </button>
+                            <div class="btn btn-outline-warning addRow">
+                                Satır Ekle
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+    @section Scripts{
+    <script>
+
+        var dataRowId = 1;
+        $(".addRow").on('click', function() {
+            var productRow = $(".productRow[data-row-id='1']");
+            var newRow = productRow.clone();
+            var lastRow = $(".productRow").last();
+            dataRowId++;
+            lastRow.after(newRow);
+            productRow.parent().find(".productRow").last().attr("data-row-id", dataRowId);
+            productRow.parent().find(".deleteRow").last().attr("data-row-id", dataRowId);
+            productRow.parent().find(".deleteRow").last().show();
+            addDeleteRowFunction(productRow.parent().find(".deleteRow").last());
+
+        })
+
+        $(".deleteRow").on('click', function() {
+                var currentRow = $(this).attr("data-row-id");
+                var productRow = $(".productRow[data-row-id='" + currentRow + "']");
+                productRow.remove();
+            })
+
+        function addDeleteRowFunction(thiss) {
+            $(thiss).on('click', function() {
+                var currentRow = $(thiss).attr("data-row-id");
+                var productRow = $(".productRow[data-row-id='" + currentRow + "']");
+                productRow.remove();
+            })
+        }
+
+    </script>
+}
+

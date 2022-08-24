@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using WebUI.Models;
+using WebUI.ViewModels;
+using Z.BulkOperations;
 
 namespace WebUI.Controllers
 {
@@ -17,12 +19,47 @@ namespace WebUI.Controllers
             _productService = productService;
         }
 
-        public IActionResult Index()
+        public IActionResult AddProduct()
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult AddProduct(ProductViewModel products)
+        {
+            
+            try
+            {
+                List<Product> productsForDb = new List<Product>();
+                for (int i = 0; i < products.ProductNames.Count; i++)
+                {
+                    Product productForList = new Product
+                    {
+                        Name = products.ProductNames[i],
+                        PurchasePrice = (float)products.PurchasePrices[i],
+                        SellingPrice = (float)products.SalePrices[i],
+                        Description = products.Descriptions[i],
+                        StockAmount = products.Stocks[i],
+                        ShippingDetail = products.CargoCompanyIds[i].ToString()
+                    };
+                    productsForDb.Add(productForList);
+                }
 
-        public IActionResult Product()
+                _productService.BulkAdd(productsForDb, options =>
+                {
+                    options.InsertIfNotExists = true;
+                    options.ErrorMode = ErrorModeType.ThrowException;
+                });
+                ViewBag.Success = "Succesfully Inserted";
+            }
+            catch(Exception ex)
+            {
+                ViewBag.ErrMsg = "Failed " + ex.Message;
+
+            }
+            return View();
+        }
+
+        public IActionResult GetAllProducts()
         {
             return View();
         }
@@ -41,12 +78,7 @@ namespace WebUI.Controllers
         public List<Product> GetProducts()
         {
             var products = _productService.GetAll();
-            return products;          
-        }
-
-        public void AddProduct(Product product)
-        {
-            _productService.Add(product);
+            return products;
         }
     }
 }
