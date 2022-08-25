@@ -5,7 +5,8 @@
 
 
 @section Header{
-
+   @* <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 }
 
     <div id="root">
@@ -50,10 +51,8 @@
                     <div class="col-md-8 mb-3">
                         <label> Kargo Şirketi </label>
                         <div class="form-group">
-                            <select placeholder="Ürün Adı Giriniz" name="CargoCompanyIds[]" class="form-control" required>
-                                <option value="1">Aras</option>
-                                <option value="2">MNG</option>
-                                <option value="3">UPS</option>
+                            <select placeholder="Ürün Adı Giriniz" id="cargoCompanies" name="CargoCompanyIds[]" class="form-control cargoCompanies" required>
+                                
                             </select>
                         </div>
                     </div>
@@ -85,6 +84,9 @@
     @section Scripts{
     <script>
 
+
+        
+
         var dataRowId = 1;
         $(".addRow").on('click', function() {
             var productRow = $(".productRow[data-row-id='1']");
@@ -113,6 +115,16 @@
             })
         }
 
+
+        $.ajax({
+            url: "/Home/GetShippingCompanies",
+            method: "GET",
+            success: function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    $('.cargoCompanies').append(`<option value="${(data[i].id)}">${(data[i].name)}</option>`)
+                }
+            }
+        })
     </script>
 }
 

@@ -1,16 +1,16 @@
 ﻿using Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using Z.BulkOperations;
 
 namespace DataAccess.Abstract
 {
     public interface IShippingCompanyDal
     {
+        void BulkAdd(List<ShippingCompany> shippingCompany, Action<BulkOperation>? options);
+
         void Add(ShippingCompany shippingCompany);
+
         List<ShippingCompany> GetAll(Expression<Func<ShippingCompany, bool>> filter = null);
+        ShippingCompany Get(Expression<Func<ShippingCompany, bool>> filter);
     }
 }

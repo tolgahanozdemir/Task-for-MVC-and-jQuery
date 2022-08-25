@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{8C5F5845-F76E-4DB0-9798-FEC88CF88F97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{8C5F5845-F76E-4DB0-9798-FEC88CF88F97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{FC8B4F97-41E5-4945-8269-F3EEDCBAB620}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{FC8B4F97-41E5-4945-8269-F3EEDCBAB620}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "Business\Business.csproj", "{C05F71D6-4B43-49EB-807E-D82C92787B7E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Business.csproj", "{C05F71D6-4B43-49EB-807E-D82C92787B7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{50C21F98-02AD-4A8C-A7BD-394FE0F59AAE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUI", "WebUI\WebUI.csproj", "{DCB61FF2-BBDD-423B-B311-24FBBB68E7B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebUI", "WebUI\WebUI.csproj", "{DCB61FF2-BBDD-423B-B311-24FBBB68E7B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +29,6 @@ Global
 		{C05F71D6-4B43-49EB-807E-D82C92787B7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C05F71D6-4B43-49EB-807E-D82C92787B7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C05F71D6-4B43-49EB-807E-D82C92787B7E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{50C21F98-02AD-4A8C-A7BD-394FE0F59AAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50C21F98-02AD-4A8C-A7BD-394FE0F59AAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50C21F98-02AD-4A8C-A7BD-394FE0F59AAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50C21F98-02AD-4A8C-A7BD-394FE0F59AAE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DCB61FF2-BBDD-423B-B311-24FBBB68E7B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DCB61FF2-BBDD-423B-B311-24FBBB68E7B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCB61FF2-BBDD-423B-B311-24FBBB68E7B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
