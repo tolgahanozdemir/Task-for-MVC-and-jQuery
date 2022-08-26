@@ -117,8 +117,23 @@ namespace WebUI.Controllers
             }
             return View();
         }
-        public List<ShippingCompany> GetShippingCompanies()
+        public List<ShippingCompany> GetShippingCompanies(string searchWord)
         {
+            var filteredCompanies = new List<ShippingCompany>();
+            if (searchWord != null)
+            {
+                searchWord = searchWord.ToLower();
+                var data = _shippingCompanyService.GetAll();
+                foreach (var item in data)
+                {
+                    if (item.Name.ToLower().Contains(searchWord))
+                    {
+                        filteredCompanies.Add(item);
+                    }
+                    
+                }
+                return filteredCompanies;
+            }
             return _shippingCompanyService.GetAll();
         }
 
