@@ -87,42 +87,11 @@
     @section Scripts{
     <script>
 
-        function select2PrepareForShippingCompany() {
-
-            $(".selectBoxForShipping").select2({
+        function select2Prepare(selectBoxClass,controllerMethodName) {
+            console.log(selectBoxClass + " " + controllerMethodName)
+            $(selectBoxClass).select2({
                 ajax: {
-                    url: "/Home/GetShippingCompanies",
-                    type: "get",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            searchWord: params.term
-                        }
-                    },
-                    processResults: function(response) {
-
-                        var result = $.map(response, function(item) {
-
-                            return {
-                                id: item.id,
-                                text: item.name
-                            };
-                        })
-                        return {
-                            results: result
-                        }
-                    },
-                    cache: true
-                }
-            });
-        }
-
-        function select2PrepareForCategory() {
-
-            $(".selectBoxForCategory").select2({
-                ajax: {
-                    url: "/Home/GetCategories",
+                    url: controllerMethodName,
                     type: "get",
                     dataType: 'json',
                     delay: 250,
@@ -152,9 +121,8 @@
         var dataRowId = 1;
 
         $(document).ready(function() {
-
-            select2PrepareForShippingCompany();
-            select2PrepareForCategory();
+            select2Prepare(".selectBoxForShipping","/Home/GetShippingCompanies")
+            select2Prepare(".selectBoxForCategory","/Home/GetCategories")
         })
 
 
@@ -181,10 +149,10 @@
             $(".productRow").last().find(".selectBoxForShipping").val(null).trigger('change');
             $(".productRow").last().find(".selectBoxForCategory").val(null).trigger('change');
 
-            select2PrepareForShippingCompany()
-            select2PrepareForShippingCompany()
-            select2PrepareForCategory()
-            select2PrepareForCategory()
+            select2Prepare(".selectBoxForShipping","/Home/GetShippingCompanies")
+            select2Prepare(".selectBoxForShipping","/Home/GetShippingCompanies")
+            select2Prepare(".selectBoxForCategory","/Home/GetCategories")
+            select2Prepare(".selectBoxForCategory","/Home/GetCategories")
 
         });
 
