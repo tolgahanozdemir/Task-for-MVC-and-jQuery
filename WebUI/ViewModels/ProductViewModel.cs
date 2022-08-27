@@ -8,5 +8,6 @@
         public List<string> Descriptions { get; set; }
         public List<int> Stocks { get; set; }
         public List<short> CargoCompanyIds { get; set; }
+        public List<short> CategoryIds { get; set; }
     }
 }

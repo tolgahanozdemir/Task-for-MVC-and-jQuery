@@ -14,11 +14,13 @@ namespace WebUI.Controllers
         private readonly ILogger<HomeController> _logger;
         private IProductService _productService;
         private IShippingCompanyService _shippingCompanyService;
-        public HomeController(ILogger<HomeController> logger, IProductService productService, IShippingCompanyService shippingCompanyService)
+        private ICategoryService _categoryService;
+        public HomeController(ILogger<HomeController> logger, IProductService productService, IShippingCompanyService shippingCompanyService, ICategoryService categoryService)
         {
             _logger = logger;
             _productService = productService;
             _shippingCompanyService = shippingCompanyService;
+            _categoryService = categoryService;
         }
 
         public IActionResult AddProduct()
@@ -35,7 +37,7 @@ namespace WebUI.Controllers
                 
                 for (int i = 0; i < products.ProductNames.Count; i++)
                 {
-
+                    var category = _categoryService.Get(x => x.Id == Convert.ToInt32(products.CategoryIds[i]));
                     var company = _shippingCompanyService.Get(x => x.Id == Convert.ToInt32(products.CargoCompanyIds[i]));
                     Product productForList = new Product
                     {
@@ -44,7 +46,8 @@ namespace WebUI.Controllers
                         SellingPrice = (float)products.SalePrices[i],
                         Description = products.Descriptions[i],
                         StockAmount = products.Stocks[i],
-                        ShippingId = company.Id
+                        ShippingId = company.Id,
+                        CategoryId = category.Id
                     };
                     productsForDb.Add(productForList);
                 }
@@ -86,6 +89,7 @@ namespace WebUI.Controllers
             var data = new List<ProductModelForListProducts>();
             foreach (var item in products)
             {
+                var category = _categoryService.Get(x => x.Id == item.CategoryId);
                 var company = _shippingCompanyService.Get(x => x.Id == item.ShippingId);
                 ProductModelForListProducts product = new ProductModelForListProducts
                 {
@@ -94,7 +98,8 @@ namespace WebUI.Controllers
                     SalePrice = item.SellingPrice,
                     Description = item.Description,
                     Stock = item.StockAmount,
-                    CargoCompanyName = company.Name
+                    CargoCompanyName = company.Name,
+                    CategoryName = category.Name                   
                 };
                 data.Add(product);
             }
@@ -159,5 +164,64 @@ namespace WebUI.Controllers
             return View();
         }
 
+        public IActionResult AddCategory()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddCategory(CategoryViewModel categoryViewModel)
+        {
+            try
+            {
+                List<Category> categoriesForDb = new List<Category>();
+                for (int i = 0; i < categoryViewModel.CategoryNames.Count; i++)
+                {
+                    Category categoryForList = new Category
+                    {
+                        Name = categoryViewModel.CategoryNames[i]
+                    };
+                    categoriesForDb.Add(categoryForList);
+                }
+                _categoryService.BulkAdd(categoriesForDb, options =>
+                {
+                    options.InsertIfNotExists = true;
+                    options.ErrorMode = ErrorModeType.ThrowException;
+                });
+                ViewBag.Success = "Succesfully Inserted";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrMsg = "Failed " + ex.Message;
+
+            }
+            return View();
+        }
+
+        public IActionResult GetAllCategories()
+        {
+            return View();
+        }
+
+
+        public List<Category> GetCategories(string searchWord)
+        {
+            var filteredCategories = new List<Category>();
+            if (searchWord != null)
+            {
+                searchWord = searchWord.ToLower();
+                var data = _categoryService.GetAll();
+                foreach (var item in data)
+                {
+                    if (item.Name.ToLower().Contains(searchWord))
+                    {
+                        filteredCategories.Add(item);
+                    }
+
+                }
+                return filteredCategories;
+            }
+            return _categoryService.GetAll();
+        }
     }
 }

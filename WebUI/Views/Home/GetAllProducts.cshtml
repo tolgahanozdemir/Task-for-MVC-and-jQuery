@@ -15,6 +15,7 @@
                 <th scope="col">Açıklama</th>
                 <th scope="col">Stok</th>
                 <th scope="col">Kargo Şirketi</th>
+                <th scope="col">Kategori</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +32,7 @@
                         <td>@item.Description</td>
                         <td>@item.Stock</td>
                         <td>@item.CargoCompanyName</td>
+                        <td>@item.CategoryName</td>
                         j++;
                     }
                 }
@@ -48,7 +50,7 @@
             method: "GET",
             success: function(data) {
                 for (var i = 0; i < data.length; i++) {
-                    $('tbody').append(`<tr> <td>${(i + 1)}</td> <td>${data[i].productName}</td> <td>${data[i].purchasePrice}</td> <td>${data[i].salePrice}</td> <td>${data[i].description}</td> <td>${data[i].stock}</td> <td>${data[i].cargoCompanyName}</td></tr>`)
+                    $('tbody').append(`<tr> <td>${(i + 1)}</td> <td>${data[i].productName}</td> <td>${data[i].purchasePrice}</td> <td>${data[i].salePrice}</td> <td>${data[i].description}</td> <td>${data[i].stock}</td> <td>${data[i].cargoCompanyName}</td> <td>${data[i].categoryName}</td> </tr>`)
                 }
             }
         })

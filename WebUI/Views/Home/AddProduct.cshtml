@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Softinny Task";
     List<ShippingCompany> shippingData = new List<ShippingCompany>();
+    List<Category> categoryData = new List<Category>();
 }
 
 
@@ -48,7 +49,13 @@
                     <div class="col-md-8 mb-3 cargoCompanies">
                         <label> Kargo Şirketi </label>
                         <div class="form-group">
-                            <select placeholder="Kargo Şirketi Seçiniz." name="CargoCompanyIds[]" class="form-control selectBox" data-row-id="1" required></select>
+                            <select placeholder="Kargo Şirketi Seçiniz." name="CargoCompanyIds[]" class="form-control selectBoxForShipping" data-row-id="1" required></select>
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-3 categories">
+                        <label> Kategori </label>
+                        <div class="form-group">
+                            <select placeholder="Kategori Seçiniz." name="CategoryIds[]" class="form-control selectBoxForCategory" data-row-id="1" required></select>
                         </div>
                     </div>
 
@@ -80,9 +87,9 @@
     @section Scripts{
     <script>
 
-        function select2Prepare() {
+        function select2PrepareForShippingCompany() {
 
-            $(".selectBox").select2({
+            $(".selectBoxForShipping").select2({
                 ajax: {
                     url: "/Home/GetShippingCompanies",
                     type: "get",
@@ -110,11 +117,44 @@
                 }
             });
         }
+
+        function select2PrepareForCategory() {
+
+            $(".selectBoxForCategory").select2({
+                ajax: {
+                    url: "/Home/GetCategories",
+                    type: "get",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            searchWord: params.term
+                        }
+                    },
+                    processResults: function(response) {
+
+                        var result = $.map(response, function(item) {
+
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        })
+                        return {
+                            results: result
+                        }
+                    },
+                    cache: true
+                }
+            });
+        }
+
         var dataRowId = 1;
 
         $(document).ready(function() {
 
-            select2Prepare();
+            select2PrepareForShippingCompany();
+            select2PrepareForCategory();
         })
 
 
@@ -138,9 +178,13 @@
             component+='<hr>'
             component += '</div>';
             $(".productRow").last().after(component);
-            $(".productRow").last().find("select").val(null).trigger('change');
-            select2Prepare()
-            select2Prepare()
+            $(".productRow").last().find(".selectBoxForShipping").val(null).trigger('change');
+            $(".productRow").last().find(".selectBoxForCategory").val(null).trigger('change');
+
+            select2PrepareForShippingCompany()
+            select2PrepareForShippingCompany()
+            select2PrepareForCategory()
+            select2PrepareForCategory()
 
         });
 

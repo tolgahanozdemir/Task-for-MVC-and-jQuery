@@ -3,11 +3,6 @@ using Business.Abstract;
 using Business.Concrete;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.DependencyResolvers.Autofac
 {
@@ -20,6 +15,9 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<ShippingCompanyManager>().As<IShippingCompanyService>().SingleInstance();
             builder.RegisterType<ShippingCompanyDal>().As<IShippingCompanyDal>().SingleInstance();
+
+            builder.RegisterType<CategoryManager>().As<ICategoryService>().SingleInstance();
+            builder.RegisterType<CategoryDal>().As<ICategoryDal>().SingleInstance();
         }
     }
 }

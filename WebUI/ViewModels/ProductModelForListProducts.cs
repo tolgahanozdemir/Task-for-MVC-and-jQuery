@@ -8,5 +8,6 @@
         public string Description { get; set; }
         public int Stock { get; set; }
         public string CargoCompanyName { get; set; }
+        public string CategoryName { get; set; }
     }
 }
