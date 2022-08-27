@@ -23,34 +23,32 @@
                     <div class="col-md-8 mb-3">
                         <label> Alış Fiyatı </label>
                         <div class="form-group">
-                            <input type="text" name="PurchasePrices[]" placeholder="Ürün Adı Giriniz" class="form-control" required />
+                            <input type="text" name="PurchasePrices[]" placeholder="123.123" class="form-control" required />
 
                         </div>
                     </div>
                     <div class="col-md-8 mb-3">
                         <label> Satış Fiyatı </label>
                         <div class="form-group">
-                            <input type="text" name="SalePrices[]" placeholder="Ürün Adı Giriniz" class="form-control" required />
-
+                            <input type="text" name="SalePrices[]" placeholder="123.123" class="form-control" required />
                         </div>
                     </div>
                     <div class="col-md-8 mb-3">
                         <label> Ürün Açıklaması </label>
                         <div class="form-group">
-                            <textarea name="Descriptions[]" placeholder="Ürün Adı Giriniz" class="form-control" required></textarea>
+                            <textarea name="Descriptions[]" placeholder="Aracın değişeni yoktur. Sadece 5 taklalıdır." class="form-control" required></textarea>
                         </div>
                     </div>
                     <div class="col-md-8 mb-3">
                         <label> Stok Adeti </label>
                         <div class="form-group">
-                            <input type="text" name="Stocks[]" placeholder="Ürün Adı Giriniz" class="form-control" required />
-
+                            <input type="text" name="Stocks[]" placeholder="123" class="form-control" required />
                         </div>
                     </div>
-                    <div class="col-md-8 mb-3">
+                    <div class="col-md-8 mb-3 cargoCompanies">
                         <label> Kargo Şirketi </label>
-                        <div class="form-group selectBox">
-                            <select placeholder="Ürün Adı Giriniz" id="cargoCompanies" name="CargoCompanyIds[]" class="form-control cargoCompanies" required></select>
+                        <div class="form-group">
+                            <select placeholder="Kargo Şirketi Seçiniz." name="CargoCompanyIds[]" class="form-control selectBox" data-row-id="1" required></select>
                         </div>
                     </div>
 
@@ -82,22 +80,69 @@
     @section Scripts{
     <script>
 
+        function select2Prepare() {
 
+            $(".selectBox").select2({
+                ajax: {
+                    url: "/Home/GetShippingCompanies",
+                    type: "get",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            searchWord: params.term
+                        }
+                    },
+                    processResults: function(response) {
 
+                        var result = $.map(response, function(item) {
 
+                            return {
+                                id: item.id,
+                                text: item.name
+                            };
+                        })
+                        return {
+                            results: result
+                        }
+                    },
+                    cache: true
+                }
+            });
+        }
         var dataRowId = 1;
-        $(".addRow").on('click', function() {
-            var productRow = $(".productRow[data-row-id='1']");
-            var newRow = productRow.clone();
-            var lastRow = $(".productRow").last();
-            dataRowId++;
-            lastRow.after(newRow);
-            productRow.parent().find(".productRow").last().attr("data-row-id", dataRowId);
-            productRow.parent().find(".deleteRow").last().attr("data-row-id", dataRowId);
-            productRow.parent().find(".deleteRow").last().show();
-            addDeleteRowFunction(productRow.parent().find(".deleteRow").last());
 
+        $(document).ready(function() {
+
+            select2Prepare();
         })
+
+
+
+        $(".addRow").on('click', function() {
+            dataRowId++;
+            var productRow = $(".productRow[data-row-id='1']");
+            var items = productRow.find("input, select,textarea")
+            var labels = productRow.find("label");
+            var component = "";
+            component += '<div class="row d-flex justify-content-center productRow my-5" data-row-id="' + dataRowId + '">';
+            $.each(items, function(k, i) {
+                $(i).attr("data-row-id", dataRowId);
+                component += '<div class="col-md-8 mb-3">' +
+                    labels[k].outerHTML +
+                    '<div class="form-group">' +
+                    i.outerHTML +
+                    '</div>' +
+                    '</div>';
+            })
+            component+='<hr>'
+            component += '</div>';
+            $(".productRow").last().after(component);
+            $(".productRow").last().find("select").val(null).trigger('change');
+            select2Prepare()
+            select2Prepare()
+
+        });
 
         $(".deleteRow").on('click', function() {
             var currentRow = $(this).attr("data-row-id");
@@ -113,32 +158,8 @@
             })
         }
 
-        $("#cargoCompanies").select2({
-            ajax: {
-                url: "/Home/GetShippingCompanies",
-                type: "get",
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return {
-                        searchWord: params.term
-                    }
-                },
-                processResults: function(response) {
 
-                    var result = $.map(response, function(item) {
 
-                        return {
-                            id: item.id,
-                            text: item.name
-                        };
-                    })
-                    return {
-                        results: result
-                    }
-                },
-                cache: true
-            }
-        });
+
     </script>
 }

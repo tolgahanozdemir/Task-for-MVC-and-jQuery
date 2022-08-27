@@ -1,7 +1,7 @@
-﻿@using Entities.Concrete
+﻿@using WebUI.ViewModels
 @{
     ViewData["Title"] = "Get Products";
-    List<Product> productList = new List<Product>();
+    List<ProductModelForListProducts> productList = new List<ProductModelForListProducts>();
 }
 
 <div>
@@ -25,12 +25,12 @@
                     foreach (var item in productList)
                     {
                         <td>@j</td>
-                        <td>@item.Name</td>
+                        <td>@item.ProductName</td>
                         <td>@item.PurchasePrice</td>
-                        <td>@item.SellingPrice</td>
+                        <td>@item.SalePrice</td>
                         <td>@item.Description</td>
-                        <td>@item.StockAmount</td>
-                        <td>@item.ShippingDetail</td>
+                        <td>@item.Stock</td>
+                        <td>@item.CargoCompanyName</td>
                         j++;
                     }
                 }
@@ -47,9 +47,8 @@
             url: "/Home/GetProducts",
             method: "GET",
             success: function(data) {
-                console.log(data)
                 for (var i = 0; i < data.length; i++) {
-                    $('tbody').append(`<tr> <td>${(i + 1)}</td> <td>${data[i].name}</td> <td>${data[i].purchasePrice}</td> <td>${data[i].sellingPrice}</td> <td>${data[i].description}</td> <td>${data[i].stockAmount}</td> <td>${data[i].shippingDetail}</td></tr>`)
+                    $('tbody').append(`<tr> <td>${(i + 1)}</td> <td>${data[i].productName}</td> <td>${data[i].purchasePrice}</td> <td>${data[i].salePrice}</td> <td>${data[i].description}</td> <td>${data[i].stock}</td> <td>${data[i].cargoCompanyName}</td></tr>`)
                 }
             }
         })

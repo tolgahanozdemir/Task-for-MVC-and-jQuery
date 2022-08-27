@@ -15,6 +15,6 @@ namespace Entities.Concrete
         public float SellingPrice { get; set; }
         public string Description { get; set; }
         public int StockAmount { get; set; }
-        public string ShippingDetail { get; set; }
+        public int ShippingId { get; set; }
     }
 }

@@ -32,9 +32,11 @@ namespace WebUI.Controllers
             try
             {
                 List<Product> productsForDb = new List<Product>();
+                
                 for (int i = 0; i < products.ProductNames.Count; i++)
                 {
 
+                    var company = _shippingCompanyService.Get(x => x.Id == Convert.ToInt32(products.CargoCompanyIds[i]));
                     Product productForList = new Product
                     {
                         Name = products.ProductNames[i],
@@ -42,7 +44,7 @@ namespace WebUI.Controllers
                         SellingPrice = (float)products.SalePrices[i],
                         Description = products.Descriptions[i],
                         StockAmount = products.Stocks[i],
-                        ShippingDetail = products.CargoCompanyIds[i].ToString()
+                        ShippingId = company.Id
                     };
                     productsForDb.Add(productForList);
                 }
@@ -78,10 +80,25 @@ namespace WebUI.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public List<Product> GetProducts()
+        public List<ProductModelForListProducts> GetProducts()
         {
             var products = _productService.GetAll();
-            return products;
+            var data = new List<ProductModelForListProducts>();
+            foreach (var item in products)
+            {
+                var company = _shippingCompanyService.Get(x => x.Id == item.ShippingId);
+                ProductModelForListProducts product = new ProductModelForListProducts
+                {
+                    ProductName = item.Name,
+                    PurchasePrice = item.PurchasePrice,
+                    SalePrice = item.SellingPrice,
+                    Description = item.Description,
+                    Stock = item.StockAmount,
+                    CargoCompanyName = company.Name
+                };
+                data.Add(product);
+            }
+            return data;
         }
 
         public IActionResult AddShippingCompany()
