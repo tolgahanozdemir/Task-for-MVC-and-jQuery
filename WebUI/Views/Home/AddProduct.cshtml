@@ -88,7 +88,6 @@
     <script>
 
         function select2Prepare(selectBoxClass,controllerMethodName) {
-            console.log(selectBoxClass + " " + controllerMethodName)
             $(selectBoxClass).select2({
                 ajax: {
                     url: controllerMethodName,
@@ -132,6 +131,7 @@
             var productRow = $(".productRow[data-row-id='1']");
             var items = productRow.find("input, select,textarea")
             var labels = productRow.find("label");
+
             var component = "";
             component += '<div class="row d-flex justify-content-center productRow my-5" data-row-id="' + dataRowId + '">';
             $.each(items, function(k, i) {
@@ -143,9 +143,14 @@
                     '</div>' +
                     '</div>';
             })
+            component += '<div class="btn btn-outline-danger deleteRow" data-row-id="'+dataRowId+'">' +
+                'Satır Sil' +
+                '</div>';
             component+='<hr>'
             component += '</div>';
+            
             $(".productRow").last().after(component);
+            addDeleteRowFunction(".deleteRow[data-row-id='"+dataRowId+"']");
             $(".productRow").last().find(".selectBoxForShipping").val(null).trigger('change');
             $(".productRow").last().find(".selectBoxForCategory").val(null).trigger('change');
 
@@ -158,6 +163,7 @@
 
         $(".deleteRow").on('click', function() {
             var currentRow = $(this).attr("data-row-id");
+            console.log(currentRow);
             var productRow = $(".productRow[data-row-id='" + currentRow + "']");
             productRow.remove();
         })
