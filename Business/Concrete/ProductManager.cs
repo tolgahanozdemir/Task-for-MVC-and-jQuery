@@ -4,6 +4,7 @@ using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Z.BulkOperations;
@@ -40,6 +41,21 @@ namespace Business.Concrete
         public List<Product> GetAll()
         {
             return _productdal.GetAll();
+        }
+
+        public void Delete(Product product)
+        {
+            _productdal.Delete(product);
+        }
+
+        public void Update(Product product)
+        {
+            _productdal.Update(product);
+        }
+
+        public Product Get(Expression<Func<Product, bool>> filter)
+        {
+            return _productdal.Get(filter);
         }
     }
 }

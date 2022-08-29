@@ -7,6 +7,52 @@
 
 
 @section Header{
+    <style>
+        .input-group > .select2-container--bootstrap {
+            width: auto;
+            flex: 1 1 auto;
+        }
+
+            .input-group > .select2-container--bootstrap .select2-selection--single {
+                height: 100%;
+                line-height: inherit;
+                padding: 0.5rem 1rem;
+            }
+
+        .input-group > .select2-container--bootstrap, .input-group > .select2-container--default {
+            width: auto;
+            flex: 1 1 auto;
+        }
+
+            .input-group > .select2-container--bootstrap .select2-selection--single,
+            .input-group > .select2-container--default .select2-selection--single,
+            .input-group > .select2-container--bootstrap .select2-selection--multiple,
+            .input-group > .select2-container--default .select2-selection--multiple {
+                height: 100%;
+                line-height: inherit;
+                border-radius: 4px 0 0 4px;
+            }
+
+                .input-group > .select2-container--bootstrap .select2-selection--single .select2-selection__rendered,
+                .input-group > .select2-container--default .select2-selection--single .select2-selection__rendered,
+                .input-group > .select2-container--bootstrap .select2-selection--multiple .select2-selection__rendered,
+                .input-group > .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+                    height: inherit;
+                    display: -webkit-box !important;
+                    display: -ms-flexbox !important;
+                    display: flex !important;
+                    -webkit-box-align: center !important;
+                    -ms-flex-align: center !important;
+                    align-items: center !important;
+                }
+
+                .input-group > .select2-container--bootstrap .select2-selection--single .select2-selection__arrow,
+                .input-group > .select2-container--default .select2-selection--single .select2-selection__arrow,
+                .input-group > .select2-container--bootstrap .select2-selection--multiple .select2-selection__arrow,
+                .input-group > .select2-container--default .select2-selection--multiple .select2-selection__arrow {
+                    height: inherit;
+                }
+    </style>
 }
 
     <div id="root">
@@ -14,47 +60,66 @@
 
             <div class="container mt-5">
                 <div class="row d-flex justify-content-center productRow my-5" data-row-id="1">
-                    <div class="col-md-8 mb-3">
+                    <div class="col-md-8 mb-3 form-group">
                         <label> Ürün Adı</label>
-                        <div class="form-group">
-                            <input type="text" name="ProductNames[]" placeholder="Ürün Adı Giriniz" class="form-control" required />
-
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-solid fa-file-signature"></i></span>
+                            </div>
+                            <input type="text" name="ProductNames[]" placeholder="Ürün Adı" class="form-control">
                         </div>
                     </div>
-                    <div class="col-md-8 mb-3">
+                    <div class="col-md-8 mb-3 form-group">
                         <label> Alış Fiyatı </label>
-                        <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
                             <input type="text" name="PurchasePrices[]" placeholder="123.123" class="form-control" required />
-
                         </div>
                     </div>
-                    <div class="col-md-8 mb-3">
+                    <div class="col-md-8 mb-3 form-group">
                         <label> Satış Fiyatı </label>
-                        <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
                             <input type="text" name="SalePrices[]" placeholder="123.123" class="form-control" required />
                         </div>
                     </div>
-                    <div class="col-md-8 mb-3">
+                    <div class="col-md-8 mb-3 form-group">
                         <label> Ürün Açıklaması </label>
-                        <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-solid fa-file-signature"></i></span>
+                            </div>
                             <textarea name="Descriptions[]" placeholder="Aracın değişeni yoktur. Sadece 5 taklalıdır." class="form-control" required></textarea>
                         </div>
                     </div>
-                    <div class="col-md-8 mb-3">
+                    <div class="col-md-8 mb-3 form-group">
                         <label> Stok Adeti </label>
-                        <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                            </div>
                             <input type="text" name="Stocks[]" placeholder="123" class="form-control" required />
                         </div>
                     </div>
-                    <div class="col-md-8 mb-3 cargoCompanies">
+                    <div class="col-md-8 mb-3 form-group">
                         <label> Kargo Şirketi </label>
-                        <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-solid fa-truck"></i></span>
+                            </div>
                             <select placeholder="Kargo Şirketi Seçiniz." name="CargoCompanyIds[]" class="form-control selectBoxForShipping" data-row-id="1" required></select>
                         </div>
                     </div>
                     <div class="col-md-8 mb-3 categories">
                         <label> Kategori </label>
-                        <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            </div>
                             <select placeholder="Kategori Seçiniz." name="CategoryIds[]" class="form-control selectBoxForCategory" data-row-id="1" required></select>
                         </div>
                     </div>
@@ -87,7 +152,7 @@
     @section Scripts{
     <script>
 
-        function select2Prepare(selectBoxClass,controllerMethodName) {
+        function select2Prepare(selectBoxClass, controllerMethodName) {
             $(selectBoxClass).select2({
                 ajax: {
                     url: controllerMethodName,
@@ -120,44 +185,48 @@
         var dataRowId = 1;
 
         $(document).ready(function() {
-            select2Prepare(".selectBoxForShipping","/Home/GetShippingCompanies")
-            select2Prepare(".selectBoxForCategory","/Home/GetCategories")
+            select2Prepare(".selectBoxForShipping", "/Home/GetShippingCompanies")
+            select2Prepare(".selectBoxForCategory", "/Home/GetCategories")
         })
-
-
 
         $(".addRow").on('click', function() {
             dataRowId++;
             var productRow = $(".productRow[data-row-id='1']");
             var items = productRow.find("input, select,textarea")
             var labels = productRow.find("label");
-
+            var spans = productRow.find("i");
             var component = "";
             component += '<div class="row d-flex justify-content-center productRow my-5" data-row-id="' + dataRowId + '">';
             $.each(items, function(k, i) {
                 $(i).attr("data-row-id", dataRowId);
-                component += '<div class="col-md-8 mb-3">' +
+                component += '<div class="col-md-8 mb-3 form-group">' +
                     labels[k].outerHTML +
-                    '<div class="form-group">' +
+                    '<div class="input-group">'+ 
+                    '<div class="input-group-prepend">'+
+                    '<span class="input-group-text">' +
+                    spans[k].outerHTML +
+                    '</span>' +
+                    '</div>' +
                     i.outerHTML +
                     '</div>' +
-                    '</div>';
+                    '</div>'+
+                    '<br>';
             })
-            component += '<div class="btn btn-outline-danger deleteRow" data-row-id="'+dataRowId+'">' +
+            component += '<div class="btn btn-outline-danger col-md-5 deleteRow" data-row-id="' + dataRowId + '">' +
                 'Satır Sil' +
                 '</div>';
-            component+='<hr>'
+            component += '<hr>'
             component += '</div>';
-            
+
             $(".productRow").last().after(component);
-            addDeleteRowFunction(".deleteRow[data-row-id='"+dataRowId+"']");
+            addDeleteRowFunction(".deleteRow[data-row-id='" + dataRowId + "']");
             $(".productRow").last().find(".selectBoxForShipping").val(null).trigger('change');
             $(".productRow").last().find(".selectBoxForCategory").val(null).trigger('change');
 
-            select2Prepare(".selectBoxForShipping","/Home/GetShippingCompanies")
-            select2Prepare(".selectBoxForShipping","/Home/GetShippingCompanies")
-            select2Prepare(".selectBoxForCategory","/Home/GetCategories")
-            select2Prepare(".selectBoxForCategory","/Home/GetCategories")
+            select2Prepare(".selectBoxForShipping", "/Home/GetShippingCompanies")
+            select2Prepare(".selectBoxForShipping", "/Home/GetShippingCompanies")
+            select2Prepare(".selectBoxForCategory", "/Home/GetCategories")
+            select2Prepare(".selectBoxForCategory", "/Home/GetCategories")
 
         });
 

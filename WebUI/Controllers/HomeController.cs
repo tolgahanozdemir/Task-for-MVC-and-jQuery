@@ -36,6 +36,10 @@ namespace WebUI.Controllers
         {
             return View();
         }
+        public IActionResult DeleteProduct()
+        {
+            return AddProduct();
+        }
         [HttpPost]
         public IActionResult AddProduct(ProductViewModel products)
         {
@@ -59,6 +63,7 @@ namespace WebUI.Controllers
                         CategoryId = category.Id
                     };
                     productsForDb.Add(productForList);
+                    ViewBag.Success = "Succesfully Inserted";
                 }
 
                 _productService.BulkAdd(productsForDb, options =>
@@ -66,12 +71,25 @@ namespace WebUI.Controllers
                     options.InsertIfNotExists = true;
                     options.ErrorMode = ErrorModeType.ThrowException;
                 });
-                ViewBag.Success = "Succesfully Inserted";
+                
             }
             catch (Exception ex)
             {
                 ViewBag.ErrMsg = "Failed " + ex.Message;
 
+            }
+            return View();
+        }
+        [HttpPost]
+        public IActionResult DeleteProduct(string productName)
+        {
+            try
+            {
+                var product = _productService.Get(x => x.Name == productName);
+                _productService.Delete(product);
+            }
+            catch (Exception ex)
+            {
             }
             return View();
         }

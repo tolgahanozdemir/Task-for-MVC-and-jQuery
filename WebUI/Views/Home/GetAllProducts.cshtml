@@ -16,23 +16,27 @@
                 <th scope="col">Stok</th>
                 <th scope="col">Kargo Şirketi</th>
                 <th scope="col">Kategori</th>
+                <th scope="col">çekbaks</th>
+                <th scope="col">sil knk</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <tr class="asBayraklariAsAs">
 
                 @{
                     int j = 1;
                     foreach (var item in productList)
                     {
-                        <td>@j</td>
-                        <td>@item.ProductName</td>
-                        <td>@item.PurchasePrice</td>
-                        <td>@item.SalePrice</td>
-                        <td>@item.Description</td>
-                        <td>@item.Stock</td>
-                        <td>@item.CargoCompanyName</td>
-                        <td>@item.CategoryName</td>
+                                <td>@j</td>
+                                <td>@item.ProductName</td>
+                                <td>@item.PurchasePrice</td>
+                                <td>@item.SalePrice</td>
+                                <td>@item.Description</td>
+                                <td>@item.Stock</td>
+                                <td>@item.CargoCompanyName</td>
+                                <td>@item.CategoryName</td>
+                                <td></td>
+                                <td></td>
                         j++;
                     }
                 }
@@ -40,6 +44,8 @@
             </tr>
         </tbody>
     </table>
+
+    <button type="button" class="btn btn-danger">Seçili Olan Ürünleri Sil</button>
 </div>
 
 
@@ -50,10 +56,53 @@
             method: "GET",
             success: function(data) {
                 for (var i = 0; i < data.length; i++) {
-                    $('tbody').append(`<tr> <td>${(i + 1)}</td> <td>${data[i].productName}</td> <td>${data[i].purchasePrice}</td> <td>${data[i].salePrice}</td> <td>${data[i].description}</td> <td>${data[i].stock}</td> <td>${data[i].cargoCompanyName}</td> <td>${data[i].categoryName}</td> </tr>`)
+                    $('tbody').append(
+                        `<tr class="listViewProducts" data-row-id='${i+1}'>
+                            <td>${(i + 1)}</td>
+                            <td>${data[i].productName}</td>
+                            <td>${data[i].purchasePrice}</td>
+                            <td>${data[i].salePrice}</td>
+                            <td>${data[i].description}</td>
+                            <td>${data[i].stock}</td>
+                            <td>${data[i].cargoCompanyName}</td>
+                            <td>${data[i].categoryName}</td>
+                            <td>
+                            <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" data-row-name='${data[i].productName}'>
+                            <div class="input-group-prepend">
+                            <label class="form-check-label" for="flexCheckDefault" ></label>
+                            <span class="input-group-text"><i class="fas fa-solid fa-dumpster"></i></span>
+                            </div>
+                            </div>
+                            </td>
+                            <td>
+                            <div type="submit" class="btn btn-danger deleteRow submit" 
+                                data-row-name='${data[i].productName}' 
+                                data-row-id='${i+1}'>Sil
+                            </div>
+                            </td>
+                            </tr>
+                            `)
+                    var dataRowName = data[i].productName;
+                    addDeleteRowFunction(".deleteRow[data-row-name='" + dataRowName + "']");
                 }
             }
         })
+
+        function addDeleteRowFunction(thiss) {
+            $(thiss).on('click', function() {
+                var currentRowName = $(thiss).attr("data-row-name");
+                var currentRowId = $(thiss).attr("data-row-id");
+                var productRow = $(".listViewProducts[data-row-id='" + currentRowId + "']");
+                console.log(productRow);
+                productRow.remove();
+                $.post("/Home/DeleteProduct",
+                    {
+                        productName: currentRowName,
+                })
+                
+            })
+        }
     </script>
 }
 
