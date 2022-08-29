@@ -27,16 +27,16 @@
                     int j = 1;
                     foreach (var item in productList)
                     {
-                                <td>@j</td>
-                                <td>@item.ProductName</td>
-                                <td>@item.PurchasePrice</td>
-                                <td>@item.SalePrice</td>
-                                <td>@item.Description</td>
-                                <td>@item.Stock</td>
-                                <td>@item.CargoCompanyName</td>
-                                <td>@item.CategoryName</td>
-                                <td></td>
-                                <td></td>
+                        <td>@j</td>
+                        <td>@item.ProductName</td>
+                        <td>@item.PurchasePrice</td>
+                        <td>@item.SalePrice</td>
+                        <td>@item.Description</td>
+                        <td>@item.Stock</td>
+                        <td>@item.CargoCompanyName</td>
+                        <td>@item.CategoryName</td>
+                        <td></td>
+                        <td></td>
                         j++;
                     }
                 }
@@ -51,57 +51,118 @@
 
 @section Scripts{
     <script>
+        $(document).ready(function() {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+        });
         $.ajax({
             url: "/Home/GetProducts",
             method: "GET",
             success: function(data) {
                 for (var i = 0; i < data.length; i++) {
                     $('tbody').append(
-                        `<tr class="listViewProducts" data-row-id='${i+1}'>
-                            <td>${(i + 1)}</td>
-                            <td>${data[i].productName}</td>
-                            <td>${data[i].purchasePrice}</td>
-                            <td>${data[i].salePrice}</td>
-                            <td>${data[i].description}</td>
-                            <td>${data[i].stock}</td>
-                            <td>${data[i].cargoCompanyName}</td>
-                            <td>${data[i].categoryName}</td>
-                            <td>
-                            <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" data-row-name='${data[i].productName}'>
-                            <div class="input-group-prepend">
-                            <label class="form-check-label" for="flexCheckDefault" ></label>
-                            <span class="input-group-text"><i class="fas fa-solid fa-dumpster"></i></span>
-                            </div>
-                            </div>
-                            </td>
-                            <td>
-                            <div type="submit" class="btn btn-danger deleteRow submit" 
-                                data-row-name='${data[i].productName}' 
-                                data-row-id='${i+1}'>Sil
-                            </div>
-                            </td>
-                            </tr>
-                            `)
+                        `<tr class="listViewProducts" data-row-id='${i + 1}'>
+                        <td>${(i + 1)}</td>
+                        <td>${data[i].productName}</td>
+                        <td>${data[i].purchasePrice}</td>
+                        <td>${data[i].salePrice}</td>
+                        <td>${data[i].description}</td>
+                        <td>${data[i].stock}</td>
+                        <td>${data[i].cargoCompanyName}</td>
+                        <td>${data[i].categoryName}</td>
+                        <td>
+                        <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" data-row-name='${data[i].productName}'>
+                        <div class="input-group-prepend">
+                        <label class="form-check-label" for="flexCheckDefault" ></label>
+                        <span class="input-group-text"><i class="fas fa-solid fa-dumpster"></i></span>
+                        </div>
+                        </div>
+                        </td>
+                        <td>
+                        <div type="submit" class="btn btn-danger deleteRow submit"
+                            data-row-name='${data[i].productName}'
+                            data-row-id='${i + 1}'>Sil
+                        </div>
+                        </td>
+                        </tr>
+                        `);
                     var dataRowName = data[i].productName;
-                    addDeleteRowFunction(".deleteRow[data-row-name='" + dataRowName + "']");
+                    addDeleteOneRowFunction(".deleteRow[data-row-name='" + dataRowName + "']");
                 }
             }
         })
 
-        function addDeleteRowFunction(thiss) {
+        function addDeleteOneRowFunction(thiss) {
             $(thiss).on('click', function() {
                 var currentRowName = $(thiss).attr("data-row-name");
                 var currentRowId = $(thiss).attr("data-row-id");
                 var productRow = $(".listViewProducts[data-row-id='" + currentRowId + "']");
-                console.log(productRow);
-                productRow.remove();
-                $.post("/Home/DeleteProduct",
-                    {
-                        productName: currentRowName,
-                })
-                
+                var swallText = currentRowName + " adlı ürünü silmek istediğine emin misin?";
+                swal(swallText, {
+                    buttons: {
+                        cancel: "Hayır",
+                        catch: {
+                            text: "Evet",
+                            value: "deleteRow",
+                        },
+                    },
+                    icon: "warning",
+                }).then((value) => {
+                    switch (value) {
+
+                        case "deleteRow":
+                            $.ajax({
+                                url: '/Home/DeleteProduct',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: { productName: currentRowName },
+
+                                success: function(result) {
+                                    if (result.success == true) {
+                                        var deleteMessage = currentRowName + " İsimli Ürün Silindi"
+                                        toastr.success(result.message, deleteMessage);
+                                        productRow.remove();
+                                    }
+                                    else {
+                                        toastr.info(result.message, 'Information Alert');
+                                    }
+                                },
+                                error: function(err) {
+                                    toastr.error('Dat Dat Error', 'Error Alert');
+                                }
+                            });
+                            break;
+                        default:
+                            toastr.warning('Silmedin he', 'Hoop Hemşerim');
+                            break;
+                    }
+                });
+
+
+
+
+
+
+
+
             })
+        }
+
+        function addDeleteSelectedRowsFunction(thiss) {
+
         }
     </script>
 }

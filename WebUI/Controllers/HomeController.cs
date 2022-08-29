@@ -47,7 +47,7 @@ namespace WebUI.Controllers
             try
             {
                 List<Product> productsForDb = new List<Product>();
-                
+
                 for (int i = 0; i < products.ProductNames.Count; i++)
                 {
                     var category = _categoryService.Get(x => x.Id == Convert.ToInt32(products.CategoryIds[i]));
@@ -62,8 +62,7 @@ namespace WebUI.Controllers
                         ShippingId = company.Id,
                         CategoryId = category.Id
                     };
-                    productsForDb.Add(productForList);
-                    ViewBag.Success = "Succesfully Inserted";
+                    productsForDb.Add(productForList);                  
                 }
 
                 _productService.BulkAdd(productsForDb, options =>
@@ -71,7 +70,7 @@ namespace WebUI.Controllers
                     options.InsertIfNotExists = true;
                     options.ErrorMode = ErrorModeType.ThrowException;
                 });
-                
+                ViewBag.Success = "Succesfully Inserted";
             }
             catch (Exception ex)
             {
@@ -81,17 +80,11 @@ namespace WebUI.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult DeleteProduct(string productName)
+        public JsonResult DeleteProduct(string productName)
         {
-            try
-            {
-                var product = _productService.Get(x => x.Name == productName);
-                _productService.Delete(product);
-            }
-            catch (Exception ex)
-            {
-            }
-            return View();
+            var product = _productService.Get(x => x.Name == productName);
+            _productService.Delete(product);
+            return Json(new { success = true, responseText = "Deleted Scussefully" });
         }
 
         public IActionResult GetAllProducts()
@@ -126,7 +119,7 @@ namespace WebUI.Controllers
                     Description = item.Description,
                     Stock = item.StockAmount,
                     CargoCompanyName = company.Name,
-                    CategoryName = category.Name                   
+                    CategoryName = category.Name
                 };
                 data.Add(product);
             }
@@ -179,7 +172,7 @@ namespace WebUI.Controllers
                     {
                         filteredCompanies.Add(item);
                     }
-                    
+
                 }
                 return filteredCompanies;
             }
