@@ -23,6 +23,15 @@ namespace WebUI.Controllers
             _categoryService = categoryService;
         }
 
+        public IActionResult Homepage()
+        {
+            return View();
+        }
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
         public IActionResult AddProduct()
         {
             return View();

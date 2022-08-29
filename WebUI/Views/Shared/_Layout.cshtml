@@ -1,88 +1,24 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebUI</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WebUI.styles.css" asp-append-version="true" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
 
+    @await Html.PartialAsync("../Shared/_HeaderHtml.cshtml")
     @await RenderSectionAsync("Header", required: false)
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="AddProduct">HepsiŞurada</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AddProduct">Ürün Ekle</a>
-                        </li>
-                        <li id="listProductNavbar" class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="GetAllProducts">Ürünleri Listele</a>
-                        </li>
-                        <li id="listProductNavbar" class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AddShippingCompany">Kargo Şirketi Ekle</a>
-                        </li>
-                        <li id="listProductNavbar" class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="GetAllShippingCompanies">Kargo Şirketlerini Listele</a>
-                        </li>
-                        <li id="listProductNavbar" class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AddCategory">Kategori Ekle</a>
-                        </li>
-                        <li id="listProductNavbar" class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="GetAllCategories">Kategorileri Listele</a>
-                        </li>
-                    </ul>
-
-                </div>
-            </div>
-        </nav>
-    </header>
+<body class="layout-top-nav">
+    @await Html.PartialAsync("../Shared/_Sidebar.cshtml")
+    @await Html.PartialAsync("../Shared/_Header.cshtml")
+    
     <div class="container ">
         <main role="main" class="pb-3">
+            
             @RenderBody()
         </main>
 
     </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="~/lib/select2/js/select2.min.js"></script>
-    <script src="~/lib/select2/js/select2.js"></script>
-    @if (@ViewBag.Success != null)
-    {
-        <script>
-            swal({
 
-                title: "Nayys hojjamm",
-                text: "@Html.Raw(@ViewBag.Success)",
-                icon: "success"
-            });
-
-        </script>
-    }
-    @if (@ViewBag.ErrMsg != null)
-    {
-        <script>
-            swal({
-
-                title: "Agga",
-                text: "@Html.Raw(@ViewBag.ErrMsg)",
-                icon: "error"
-            });
-        </script>
-    }
+    @await Html.PartialAsync("../Shared/_Footer.cshtml")
+    @await Html.PartialAsync("../Shared/_FooterHtml.cshtml")
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

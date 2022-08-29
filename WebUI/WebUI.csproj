@@ -26,4 +26,8 @@
     <Folder Include="Content\Images\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\img\softinnyLogo.jpg" />
+  </ItemGroup>
+
 </Project>

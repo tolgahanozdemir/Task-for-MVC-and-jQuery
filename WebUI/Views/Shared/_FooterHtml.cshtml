@@ -1,0 +1,30 @@
+﻿
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="~/lib/select2/js/select2.min.js"></script>
+<script src="~/lib/select2/js/select2.js"></script>
+@if (@ViewBag.Success != null)
+{
+    <script>
+        swal({
+
+            title: "Nayys hojjamm",
+            text: "@Html.Raw(@ViewBag.Success)",
+            icon: "success"
+        });
+
+    </script>
+}
+@if (@ViewBag.ErrMsg != null)
+{
+    <script>
+        swal({
+
+            title: "Agga",
+            text: "@Html.Raw(@ViewBag.ErrMsg)",
+            icon: "error"
+        });
+    </script>
+}
