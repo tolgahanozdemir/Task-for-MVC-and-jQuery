@@ -4,14 +4,14 @@
 }
 
 <div id="root">
-    <form method="post" action="/Home/AddShippingCompany">
+    <form method="post" action="/Category/AddCategory">
 
         <div class="container mt-5">
-            <div class="row d-flex justify-content-center companyRow my-5" data-row-id="1">
+            <div class="row d-flex justify-content-center categoryRow my-5" data-row-id="1">
                 <div class="col-md-8 mb-3">
-                    <label> Firma Adı</label>
+                    <label> Kategori Adı</label>
                     <div class="form-group">
-                        <input type="text" name="CompanyNames[]" placeholder="Firma Adı Giriniz" class="form-control" required />
+                        <input type="text" name="CategoryNames[]" placeholder="Kategori ismi giriniz" class="form-control" required />
                     </div>
                 </div>
                 <div class="btn btn-outline-danger deleteRow" style="display:none" data-row-id="1">
@@ -40,29 +40,29 @@
 
         var dataRowId = 1;
         $(".addRow").on('click', function() {
-            var companyRow = $(".companyRow[data-row-id='1']");
-            var newRow = companyRow.clone();
-            var lastRow = $(".companyRow").last();
+            var categoryRow = $(".categoryRow[data-row-id='1']");
+            var newRow = categoryRow.clone();
+            var lastRow = $(".categoryRow").last();
             dataRowId++;
             lastRow.after(newRow);
-            companyRow.parent().find(".companyRow").last().attr("data-row-id", dataRowId);
-            companyRow.parent().find(".deleteRow").last().attr("data-row-id", dataRowId);
-            companyRow.parent().find(".deleteRow").last().show();
-            addDeleteRowFunction(companyRow.parent().find(".deleteRow").last());
+            categoryRow.parent().find(".categoryRow").last().attr("data-row-id", dataRowId);
+            categoryRow.parent().find(".deleteRow").last().attr("data-row-id", dataRowId);
+            categoryRow.parent().find(".deleteRow").last().show();
+            addDeleteRowFunction(categoryRow.parent().find(".deleteRow").last());
 
         })
 
         $(".deleteRow").on('click', function() {
                 var currentRow = $(this).attr("data-row-id");
-                var companyRow = $(".companyRow[data-row-id='" + currentRow + "']");
-                companyRow.remove();
+                var categoryRow = $(".categoryRow[data-row-id='" + currentRow + "']");
+                categoryRow.remove();
             })
 
         function addDeleteRowFunction(thiss) {
             $(thiss).on('click', function() {
                 var currentRow = $(thiss).attr("data-row-id");
-                var companyRow = $(".companyRow[data-row-id='" + currentRow + "']");
-                companyRow.remove();
+                var categoryRow = $(".categoryRow[data-row-id='" + currentRow + "']");
+                categoryRow.remove();
             })
         }
 

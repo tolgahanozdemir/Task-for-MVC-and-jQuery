@@ -1,12 +1,7 @@
 ﻿using Business.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using Z.BulkOperations;
 
 namespace Business.Concrete
@@ -20,14 +15,14 @@ namespace Business.Concrete
             _productdal = productdal;
         }
 
-        public void BulkAdd(List<Product> product,Action<BulkOperation>? options)
+        public void BulkAdd(List<Product> product, Action<BulkOperation>? options)
         {
-            _productdal.BulkAdd(product,options);
+            _productdal.BulkAdd(product, options);
         }
 
         public void Add(Product product)
         {
-            if (product.SellingPrice >0 && product.PurchasePrice>0)
+            if (product.SellingPrice > 0 && product.PurchasePrice > 0)
             {
                 _productdal.Add(product);
             }
@@ -35,7 +30,6 @@ namespace Business.Concrete
             {
                 throw new Exception("Tüm alanlar doldurulmak zorundadır.");
             }
-            
         }
 
         public List<Product> GetAll()
@@ -56,6 +50,11 @@ namespace Business.Concrete
         public Product Get(Expression<Func<Product, bool>> filter)
         {
             return _productdal.Get(filter);
+        }
+
+        public void BulkDelete(List<Product> product, Action<BulkOperation>? options)
+        {
+            _productdal.BulkDelete(product, options);
         }
     }
 }

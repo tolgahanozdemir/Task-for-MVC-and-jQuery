@@ -93,7 +93,7 @@
             var productRow = $(".listViewProducts[data-row-id='" + currentRowId + "']");
             var productIdtoDelete = productRow.find("#productId").attr("product-id");
             $.ajax({
-                url: '/Home/DeleteProduct',
+                url: '/Product/DeleteProduct',
                 type: 'POST',
                 dataType: 'json',
                 data: { productId: productIdtoDelete },
@@ -115,7 +115,7 @@
         }
 
         $.ajax({
-            url: "/Home/GetProducts",
+            url: "/Product/GetProducts",
             method: "GET",
             beforeSend: function() {
                 $("#loading").show();

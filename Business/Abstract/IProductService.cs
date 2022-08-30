@@ -12,6 +12,7 @@ namespace Business.Abstract
     public interface IProductService
     {
         void BulkAdd(List<Product> product, Action<BulkOperation>? options);
+        void BulkDelete(List<Product> product, Action<BulkOperation>? options);
         void Add(Product product);
         void Delete(Product product);
         void Update(Product product);

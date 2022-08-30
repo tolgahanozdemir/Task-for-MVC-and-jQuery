@@ -1,7 +1,7 @@
 ﻿@using Entities.Concrete
 @{
-    ViewData["Title"] = "Get Categories";
-    List<Category> categoryList = new List<Category>();
+    ViewData["Title"] = "Get Shipping Companies";
+    List<ShippingCompany> shippingCompanyList = new List<ShippingCompany>();
 }
 
 @section Header{
@@ -11,7 +11,7 @@
 
 
 
-<div>
+<div class="container">
     <table class="table">
         <thead>
             <tr>
@@ -24,7 +24,7 @@
 
                 @{
                     int j = 1;
-                    foreach (var item in categoryList)
+                    foreach (var item in shippingCompanyList)
                     {
                         <td>@j</td>
                         <td>@item.Name</td>
@@ -44,10 +44,9 @@
 @section Scripts{
     <script>
         $.ajax({
-            url: "/Home/GetCategories",
+            url: "/ShippingCompany/GetShippingCompanies",
             method: "GET",
             success: function(data) {
-                console.log(data)
                 for (var i = 0; i < data.length; i++) {
                     $('tbody').append(`<tr> <td>${(data[i].id)}</td>  <td>${(data[i].name)}</td> </tr>`)
                 }

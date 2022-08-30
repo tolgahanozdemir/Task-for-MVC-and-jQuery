@@ -56,7 +56,7 @@
 }
 
     <div id="root">
-        <form method="post" action="/Home/AddProduct">
+        <form method="post" action="/Product/AddProduct">
 
             <div class="container mt-5">
                 <div class="row d-flex justify-content-center productRow my-5" data-row-id="1">
@@ -185,8 +185,8 @@
         var dataRowId = 1;
 
         $(document).ready(function() {
-            select2Prepare(".selectBoxForShipping", "/Home/GetShippingCompanies")
-            select2Prepare(".selectBoxForCategory", "/Home/GetCategories")
+            select2Prepare(".selectBoxForShipping", "/ShippingCompany/GetShippingCompanies")
+            select2Prepare(".selectBoxForCategory", "/Category/GetCategories")
         })
 
         $(".addRow").on('click', function() {
@@ -223,10 +223,10 @@
             $(".productRow").last().find(".selectBoxForShipping").val(null).trigger('change');
             $(".productRow").last().find(".selectBoxForCategory").val(null).trigger('change');
 
-            select2Prepare(".selectBoxForShipping", "/Home/GetShippingCompanies")
-            select2Prepare(".selectBoxForShipping", "/Home/GetShippingCompanies")
-            select2Prepare(".selectBoxForCategory", "/Home/GetCategories")
-            select2Prepare(".selectBoxForCategory", "/Home/GetCategories")
+            select2Prepare(".selectBoxForShipping", "/ShippingCompany/GetShippingCompanies")
+            select2Prepare(".selectBoxForShipping", "/ShippingCompany/GetShippingCompanies")
+            select2Prepare(".selectBoxForCategory", "/Category/GetCategories")
+            select2Prepare(".selectBoxForCategory", "/Category/GetCategories")
 
         });
 
