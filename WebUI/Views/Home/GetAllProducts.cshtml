@@ -3,53 +3,66 @@
     ViewData["Title"] = "Get Products";
     List<ProductModelForListProducts> productList = new List<ProductModelForListProducts>();
 }
+@section Header{
+    <style>
+                .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          bottom: 0;
+          right: 0;
+          background: rgba(255,255,255,0.7);
+        }
+        .overlay__wrapper {
+          width: 100%;
+          height: 100%;
+          position: relative;
+        }
+        .overlay__spinner {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
 
-<div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">İsim</th>
-                <th scope="col">Alış Fiyatı</th>
-                <th scope="col">Satış Fiyatı</th>
-                <th scope="col">Açıklama</th>
-                <th scope="col">Stok</th>
-                <th scope="col">Kargo Şirketi</th>
-                <th scope="col">Kategori</th>
-                <th scope="col">çekbaks</th>
-                <th scope="col">sil knk</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="asBayraklariAsAs">
-
-                @{
-                    int j = 1;
-                    foreach (var item in productList)
-                    {
-                        <td>@j</td>
-                        <td>@item.ProductName</td>
-                        <td>@item.PurchasePrice</td>
-                        <td>@item.SalePrice</td>
-                        <td>@item.Description</td>
-                        <td>@item.Stock</td>
-                        <td>@item.CargoCompanyName</td>
-                        <td>@item.CategoryName</td>
-                        <td></td>
-                        <td></td>
-                        j++;
-                    }
-                }
-
-            </tr>
-        </tbody>
-    </table>
-
-    <button type="button" class="btn btn-danger">Seçili Olan Ürünleri Sil</button>
-</div>
+    </style>
+}
 
 
-@section Scripts{
+    <div class="container">
+
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">İsim</th>
+                    <th scope="col">Alış Fiyatı</th>
+                    <th scope="col">Satış Fiyatı</th>
+                    <th scope="col">Açıklama</th>
+                    <th scope="col">Stok</th>
+                    <th scope="col">Kargo Şirketi</th>
+                    <th scope="col">Kategori</th>
+                    <th scope="col">çekbaks</th>
+                    <th scope="col">sil knk</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="" style="display:none">
+                    <div id="loading" class="spinner-grow overlay__spinner" style="display:none;" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </tr>
+            </tbody>
+        </table>
+        <button type="button" class="btn btn-danger deleteCheckedButton">Seçili Olan Ürünleri Sil</button>
+    </div>
+
+
+
+
+
+    @section Scripts{
     <script>
         $(document).ready(function() {
             toastr.options = {
@@ -67,103 +80,111 @@
                 "hideMethod": "fadeOut"
             };
         });
+
+        function cancelFunction() {
+            toastr.warning('Silmekten vazgeçtiniz.', 'Ürün silinmedi.')
+        }
+
+        function acceptFunction(deleteRowOne) {
+            var currentRowName = $(deleteRowOne).attr("data-row-name");
+
+            var currentRowId = $(deleteRowOne).attr("data-row-id");
+
+            var productRow = $(".listViewProducts[data-row-id='" + currentRowId + "']");
+            var productIdtoDelete = productRow.find("#productId").attr("product-id");
+            $.ajax({
+                url: '/Home/DeleteProduct',
+                type: 'POST',
+                dataType: 'json',
+                data: { productId: productIdtoDelete },
+                success: function(result) {
+
+                    if (result.success == true) {
+                        var deleteMessage = currentRowName + " İsimli Ürün Silindi"
+                        toastr.success(result.message, deleteMessage);
+                        productRow.hide('500', function() { productRow.remove() })
+                    }
+                    else {
+                        toastr.info(result.message, 'Information Alert');
+                    }
+                },
+                error: function(err) {
+                    toastr.error('Dat Dat Error', 'Error Alert');
+                }
+            });
+        }
+
         $.ajax({
             url: "/Home/GetProducts",
             method: "GET",
+            beforeSend: function() {
+                $("#loading").show();
+            },
             success: function(data) {
+                $("#loading").hide();
                 for (var i = 0; i < data.length; i++) {
                     $('tbody').append(
                         `<tr class="listViewProducts" data-row-id='${i + 1}'>
-                        <td>${(i + 1)}</td>
-                        <td>${data[i].productName}</td>
-                        <td>${data[i].purchasePrice}</td>
-                        <td>${data[i].salePrice}</td>
-                        <td>${data[i].description}</td>
-                        <td>${data[i].stock}</td>
-                        <td>${data[i].cargoCompanyName}</td>
-                        <td>${data[i].categoryName}</td>
-                        <td>
-                        <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" data-row-name='${data[i].productName}'>
-                        <div class="input-group-prepend">
-                        <label class="form-check-label" for="flexCheckDefault" ></label>
-                        <span class="input-group-text"><i class="fas fa-solid fa-dumpster"></i></span>
-                        </div>
-                        </div>
-                        </td>
-                        <td>
-                        <div type="submit" class="btn btn-danger deleteRow submit"
-                            data-row-name='${data[i].productName}'
-                            data-row-id='${i + 1}'>Sil
-                        </div>
-                        </td>
-                        </tr>
-                        `);
+                                <th scope="row">${(i + 1)}</td>
+                                <td>${data[i].productName}</td>
+                                <td>${data[i].purchasePrice}</td>
+                                <td>${data[i].salePrice}</td>
+                                <td>${data[i].description}</td>
+                                <td>${data[i].stock}</td>
+                                <td>${data[i].cargoCompanyName}</td>
+                                <td>${data[i].categoryName}</td>
+                                <td>
+                                <div class="form-check">
+                                <input class="form-check-input deleteCheckBox" type="checkbox" value="" id="flexCheckDefault" data-row-id='${data[i].productId}'>
+                                <div class="input-group-prepend">
+                                <label class="form-check-label" for="flexCheckDefault" ></label>
+                                <span class="input-group-text"><i class="fas fa-solid fa-dumpster"></i></span>
+                                </div>
+                                </div>
+                                </td>
+                                <td>
+                                <div type="submit" class="btn btn-danger deleteRow submit"
+                                    data-row-name='${data[i].productName}'
+                                    data-row-id='${(i + 1)}'>Sil
+                                </div>
+                                </td>
+                                <td style="display:none;" id="productId" product-id='${data[i].productId}'></td>
+                                </tr>
+                                `);
                     var dataRowName = data[i].productName;
                     addDeleteOneRowFunction(".deleteRow[data-row-name='" + dataRowName + "']");
                 }
             }
         })
 
+
         function addDeleteOneRowFunction(thiss) {
+            var swallRowText = "ürün silinsin mi"
             $(thiss).on('click', function() {
-                var currentRowName = $(thiss).attr("data-row-name");
-                var currentRowId = $(thiss).attr("data-row-id");
-                var productRow = $(".listViewProducts[data-row-id='" + currentRowId + "']");
-                var swallText = currentRowName + " adlı ürünü silmek istediğine emin misin?";
-                swal(swallText, {
-                    buttons: {
-                        cancel: "Hayır",
-                        catch: {
-                            text: "Evet",
-                            value: "deleteRow",
-                        },
-                    },
-                    icon: "warning",
-                }).then((value) => {
-                    switch (value) {
-
-                        case "deleteRow":
-                            $.ajax({
-                                url: '/Home/DeleteProduct',
-                                type: 'POST',
-                                dataType: 'json',
-                                data: { productName: currentRowName },
-
-                                success: function(result) {
-                                    if (result.success == true) {
-                                        var deleteMessage = currentRowName + " İsimli Ürün Silindi"
-                                        toastr.success(result.message, deleteMessage);
-                                        productRow.remove();
-                                    }
-                                    else {
-                                        toastr.info(result.message, 'Information Alert');
-                                    }
-                                },
-                                error: function(err) {
-                                    toastr.error('Dat Dat Error', 'Error Alert');
-                                }
-                            });
-                            break;
-                        default:
-                            toastr.warning('Silmedin he', 'Hoop Hemşerim');
-                            break;
-                    }
-                });
-
-
-
-
-
-
-
-
+                AcceptenceSwal(swallRowText, "Evet", "Hayır", function() { return acceptFunction(thiss) }, function() { return cancelFunction() })
             })
         }
 
-        function addDeleteSelectedRowsFunction(thiss) {
 
-        }
+        //function addDeleteSelectedRowsFunction() {
+
+            
+
+
+        //}
+
+
+        //function deleteCheckBoxesFunction() {
+        //    var checkBoxes = $("tbody").find(".deleteCheckBox input:checked")
+        //    $(".deleteCheckedButton").on('click', function() {
+        //        $.each(checkBoxes, function(k,i) {
+        //            var rowToDelete = $(i).attr("data-row-id")
+        //        })
+
+        //    })
+        //}
+
+
     </script>
 }
 

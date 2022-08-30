@@ -1,24 +1,24 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-
     @await Html.PartialAsync("../Shared/_HeaderHtml.cshtml")
     @await RenderSectionAsync("Header", required: false)
 </head>
-<body class="layout-top-nav">
-    @await Html.PartialAsync("../Shared/_Sidebar.cshtml")
-    @await Html.PartialAsync("../Shared/_Header.cshtml")
-    
-    <div class="container ">
-        <main role="main" class="pb-3">
-            
+<body class="layout-top-nav hold-transition sidebar-mini fixLayoutHeight" style="height:auto;">
+    <div class="wrapper">
+        @await Html.PartialAsync("../Shared/_Header.cshtml")
+        @await Html.PartialAsync("../Shared/_Sidebar.cshtml")
+        <div class="content-wrapper">
             @RenderBody()
-        </main>
-
+        </div>
     </div>
+
 
     @await Html.PartialAsync("../Shared/_Footer.cshtml")
     @await Html.PartialAsync("../Shared/_FooterHtml.cshtml")
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+<script>
+    $('body').Layout('fixLayoutHeight')
+</script>
 </html>

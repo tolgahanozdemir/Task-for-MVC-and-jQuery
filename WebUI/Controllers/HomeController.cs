@@ -80,9 +80,9 @@ namespace WebUI.Controllers
             return View();
         }
         [HttpPost]
-        public JsonResult DeleteProduct(string productName)
+        public JsonResult DeleteProduct(int productId)
         {
-            var product = _productService.Get(x => x.Name == productName);
+            var product = _productService.Get(x => x.Id == productId);
             _productService.Delete(product);
             return Json(new { success = true, responseText = "Deleted Scussefully" });
         }
@@ -113,6 +113,7 @@ namespace WebUI.Controllers
                 var company = _shippingCompanyService.Get(x => x.Id == item.ShippingId);
                 ProductModelForListProducts product = new ProductModelForListProducts
                 {
+                    ProductId = item.Id,
                     ProductName = item.Name,
                     PurchasePrice = item.PurchasePrice,
                     SalePrice = item.SellingPrice,

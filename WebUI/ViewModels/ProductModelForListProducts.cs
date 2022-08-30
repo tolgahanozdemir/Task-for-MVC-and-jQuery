@@ -2,6 +2,7 @@
 {
     public class ProductModelForListProducts
     {
+        public int ProductId { get; set; }
         public string ProductName { get; set; }
         public float PurchasePrice { get; set; }
         public float SalePrice { get; set; }
