@@ -9,13 +9,7 @@ using Z.BulkOperations;
 
 namespace DataAccess.Abstract
 {
-    public interface ICategoryDal
+    public interface ICategoryDal : IEntityRepository<Category>
     {
-        void BulkAdd(List<Category> category, Action<BulkOperation>? options);
-
-        void Add(Category category);
-
-        List<Category> GetAll(Expression<Func<Category, bool>> filter = null);
-        Category Get(Expression<Func<Category, bool>> filter);
     }
 }

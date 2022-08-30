@@ -10,13 +10,7 @@ using Z.BulkOperations;
 
 namespace DataAccess.Abstract
 {
-    public interface IProductDal
+    public interface IProductDal : IEntityRepository<Product>
     {
-        void BulkAdd(List<Product> product,Action<BulkOperation>? options);
-        void Add(Product product);
-        List<Product> GetAll(Expression<Func<Product, bool>> filter = null);
-        void Update(Product product);
-        void Delete(Product product);
-        Product Get(Expression<Func<Product, bool>> filter);
     }
 }
