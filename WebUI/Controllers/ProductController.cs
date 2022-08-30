@@ -71,6 +71,22 @@ namespace WebUI.Controllers
             return Json(new { success = true, responseText = "Deleted Scussefully" });
         }
 
+        [HttpPost]
+        public JsonResult DeleteSelectedProducts(List<int> productIds)
+        {
+            List<Product> products = new List<Product>();
+            foreach (int item in productIds)
+            {
+                var product = _productService.Get(x => x.Id == item);
+                products.Add(product);
+            }
+            _productService.BulkDelete(products, options =>
+            {
+                options.InsertIfNotExists = true;
+                options.ErrorMode = ErrorModeType.ThrowException;
+            });
+            return Json(new { success = true, responseText = "Deleted Scussefully" });
+        }
         public IActionResult GetAllProducts()
         {
             return View();

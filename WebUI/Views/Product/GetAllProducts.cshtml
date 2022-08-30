@@ -5,59 +5,68 @@
 }
 @section Header{
     <style>
-                .overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          bottom: 0;
-          right: 0;
-          background: rgba(255,255,255,0.7);
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(255,255,255,0.7);
         }
+
         .overlay__wrapper {
-          width: 100%;
-          height: 100%;
-          position: relative;
+            width: 100%;
+            height: 100%;
+            position: relative;
         }
+
         .overlay__spinner {
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
 
     </style>
 }
 
 
-    <div class="container">
-
-
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">İsim</th>
-                    <th scope="col">Alış Fiyatı</th>
-                    <th scope="col">Satış Fiyatı</th>
-                    <th scope="col">Açıklama</th>
-                    <th scope="col">Stok</th>
-                    <th scope="col">Kargo Şirketi</th>
-                    <th scope="col">Kategori</th>
-                    <th scope="col">çekbaks</th>
-                    <th scope="col">sil knk</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr id="" style="display:none">
-                    <div id="loading" class="spinner-grow overlay__spinner" style="display:none;" role="status">
-                        <span class="sr-only">Loading...</span>
+    <section class="content">
+        <div class="container-fluid">
+            <div id="loading" class="spinner-grow overlay__spinner" style="display:none;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Ürünleriniz</h3>
+                        </div>
+                        <div class="card-body">
+                            <table id="example1" style="display:none;" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>İsim</th>
+                                        <th>Alış Fiyatı</th>
+                                        <th>Satış Fiyatı</th>
+                                        <th>Açıklama</th>
+                                        <th>Stok</th>
+                                        <th>Kargo Şirketi</th>
+                                        <th>Kategori</th>
+                                        <th>sil knk</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <button disabled type="button" class="btn btn-danger deleteCheckedButton">Seçili Olan Ürünleri Sil</button>
+                        </div>
                     </div>
-                </tr>
-            </tbody>
-        </table>
-        <button type="button" class="btn btn-danger deleteCheckedButton">Seçili Olan Ürünleri Sil</button>
-    </div>
-
+                </div>
+            </div>
+        </div>
+    </section>
 
 
 
@@ -65,6 +74,7 @@
     @section Scripts{
     <script>
         $(document).ready(function() {
+            var selectedList = 0;
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -79,7 +89,81 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
             };
+
+            function addOnChangeCheckbox(checkbox) {
+            $(checkbox).change(function() {
+                console.log(selectedList)
+                if ($(this).is(":checked")) {
+
+                    selectedList++;
+                }
+                else {
+
+                    selectedList--;
+                }
+                console.log(selectedList)
+
+                if (selectedList >=1) {
+
+                    $(".deleteCheckedButton").prop("disabled", false)
+                }
+                else {
+
+                    $(".deleteCheckedButton").prop("disabled", true)
+                }
+
+
+
+            })
+        }
+
+            $.ajax({
+                url: "/Product/GetProducts",
+                method: "GET",
+                beforeSend: function() {
+                    $("#loading").show();
+
+                },
+                success: function(data) {
+                    $("#loading").hide();
+                    $("#example1").show();
+                    for (var i = 0; i < data.length; i++) {
+                        $('tbody').append(
+                            `<tr class="listViewProducts" data-row-id='${i + 1}' product-id='${data[i].productId}'>
+                                                                                                                     <td>
+                                                                                                                     <div class="icheck-danger d-inline">
+                                                                                                                     <input type="checkbox" style="width:30px; height:30px;" product-id='${data[i].productId}' class="deleteProductCheckBox">
+                                                                                                                     </div>
+                                                                                                                     </td>
+                                                                                                                     <td>${data[i].productName}</td>
+                                                                                                                     <td>${data[i].purchasePrice}</td>
+                                                                                                                     <td>${data[i].salePrice}</td>
+                                                                                                                     <td>${data[i].description}</td>
+                                                                                                                     <td>${data[i].stock}</td>
+                                                                                                                     <td>${data[i].cargoCompanyName}</td>
+                                                                                                                     <td>${data[i].categoryName}</td>
+                                                                                                                     <td>
+                                                                                                                     <div type="submit" class="btn btn-danger deleteRow submit"
+                                                                                                                         data-row-name='${data[i].productName}'
+                                                                                                                         data-row-id='${(i + 1)}'>Sil
+                                                                                                                     </div>
+                                                                                                                     </td>
+                                                                                                                     </tr>
+                                                                                                                     `);
+                        var dataRowName = data[i].productName;
+                        addDeleteOneRowFunction(".deleteRow[data-row-name='" + dataRowName + "']");
+                        addOnChangeCheckbox($("input[product-id='" + data[i].productId + "'][class='deleteProductCheckBox']"));
+                    }
+
+                    $("#example1").DataTable({
+                        "responsive": true, "lengthChange": false, "autoWidth": false,
+                        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+                }
+            })
         });
+
+         
 
         function cancelFunction() {
             toastr.warning('Silmekten vazgeçtiniz.', 'Ürün silinmedi.')
@@ -91,7 +175,7 @@
             var currentRowId = $(deleteRowOne).attr("data-row-id");
 
             var productRow = $(".listViewProducts[data-row-id='" + currentRowId + "']");
-            var productIdtoDelete = productRow.find("#productId").attr("product-id");
+            var productIdtoDelete = productRow.attr("product-id");
             $.ajax({
                 url: '/Product/DeleteProduct',
                 type: 'POST',
@@ -113,51 +197,6 @@
                 }
             });
         }
-
-        $.ajax({
-            url: "/Product/GetProducts",
-            method: "GET",
-            beforeSend: function() {
-                $("#loading").show();
-            },
-            success: function(data) {
-                $("#loading").hide();
-                for (var i = 0; i < data.length; i++) {
-                    $('tbody').append(
-                        `<tr class="listViewProducts" data-row-id='${i + 1}'>
-                                <th scope="row">${(i + 1)}</td>
-                                <td>${data[i].productName}</td>
-                                <td>${data[i].purchasePrice}</td>
-                                <td>${data[i].salePrice}</td>
-                                <td>${data[i].description}</td>
-                                <td>${data[i].stock}</td>
-                                <td>${data[i].cargoCompanyName}</td>
-                                <td>${data[i].categoryName}</td>
-                                <td>
-                                <div class="form-check">
-                                <input class="form-check-input deleteCheckBox" type="checkbox" value="" id="flexCheckDefault" data-row-id='${data[i].productId}'>
-                                <div class="input-group-prepend">
-                                <label class="form-check-label" for="flexCheckDefault" ></label>
-                                <span class="input-group-text"><i class="fas fa-solid fa-dumpster"></i></span>
-                                </div>
-                                </div>
-                                </td>
-                                <td>
-                                <div type="submit" class="btn btn-danger deleteRow submit"
-                                    data-row-name='${data[i].productName}'
-                                    data-row-id='${(i + 1)}'>Sil
-                                </div>
-                                </td>
-                                <td style="display:none;" id="productId" product-id='${data[i].productId}'></td>
-                                </tr>
-                                `);
-                    var dataRowName = data[i].productName;
-                    addDeleteOneRowFunction(".deleteRow[data-row-name='" + dataRowName + "']");
-                }
-            }
-        })
-
-
         function addDeleteOneRowFunction(thiss) {
             var swallRowText = "ürün silinsin mi"
             $(thiss).on('click', function() {
@@ -165,24 +204,52 @@
             })
         }
 
-
-        //function addDeleteSelectedRowsFunction() {
-
-            
-
-
-        //}
+        $(".deleteCheckedButton").on('click', function() {
+            var swallRowText = "Seçili Ürünler Silinsin mi?"
+            AcceptenceSwal(swallRowText, "Evet", "Hayır", function() { return deleteSelectedProductsFunction() }, function() { return cancelFunction() })
+        })
 
 
-        //function deleteCheckBoxesFunction() {
-        //    var checkBoxes = $("tbody").find(".deleteCheckBox input:checked")
-        //    $(".deleteCheckedButton").on('click', function() {
-        //        $.each(checkBoxes, function(k,i) {
-        //            var rowToDelete = $(i).attr("data-row-id")
-        //        })
 
-        //    })
-        //}
+       
+
+        function deleteSelectedProductsFunction() {
+            var selectedInputs = $("input:checked")
+            var rows = [];
+            var listToPost = [];
+            $.each(selectedInputs, function(k, i) {
+                var productId = $(i).attr("product-id")
+                var row = $(i).parent().parent().parent();
+                rows.push(row);
+                listToPost.push(productId)
+            })
+            $.ajax({
+                url: '/Product/DeleteSelectedProducts',
+                type: 'POST',
+                dataType: 'json',
+                data: { productIds: listToPost },
+                success: function(result) {
+
+                    if (result.success == true) {
+                        var deleteMessage = "Seçili Ürünler Silindi";
+                        var table = $("#example1").DataTable();
+                        toastr.success(result.message, deleteMessage);
+                        $.each(selectedInputs, function(k, i) {
+                            var rowsTable = table.rows(rows);
+                            rows[k].hide('500', function() { rowsTable.remove().draw(); rows[k].remove(); })
+                        })
+                    }
+                    else {
+                        toastr.info(result.message, 'Information Alert');
+                    }
+                },
+                error: function(err) {
+                    toastr.error('Dat Dat Error', 'Error Alert');
+                }
+            });
+
+        }
+
 
 
     </script>
