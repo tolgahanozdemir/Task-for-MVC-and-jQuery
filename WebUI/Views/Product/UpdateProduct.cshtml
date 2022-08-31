@@ -1,0 +1,142 @@
+﻿<div id="root">
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center productRow my-5" data-row-id="1">
+            <div class="col-md-8 mb-3 categories">
+                <label> Güncellemek İstediğiniz Ürünü Seçiniz. </label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    </div>
+                    <select placeholder="Kategori Seçiniz." class="form-control selectBoxForSelectProducts" data-row-id="1" required></select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" action="/Product/AddProduct">
+
+        <div class="container mt-5">
+            <div class="row d-flex justify-content-center productRow my-5" data-row-id="1">
+                <div class="col-md-8 mb-3 form-group">
+                    <label> Ürün Adı</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-solid fa-file-signature"></i></span>
+                        </div>
+                        <input type="text" name="ProductNames[]" placeholder="Ürün Adı" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-8 mb-3 form-group">
+                    <label> Alış Fiyatı </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                        </div>
+                        <input type="text" name="PurchasePrices[]" placeholder="123.123" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-md-8 mb-3 form-group">
+                    <label> Satış Fiyatı </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                        </div>
+                        <input type="text" name="SalePrices[]" placeholder="123.123" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-md-8 mb-3 form-group">
+                    <label> Ürün Açıklaması </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-solid fa-file-signature"></i></span>
+                        </div>
+                        <textarea name="Descriptions[]" placeholder="Aracın değişeni yoktur. Sadece 5 taklalıdır." class="form-control" required></textarea>
+                    </div>
+                </div>
+                <div class="col-md-8 mb-3 form-group">
+                    <label> Stok Adeti </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                        </div>
+                        <input type="text" name="Stocks[]" placeholder="123" class="form-control" required />
+                    </div>
+                </div>
+                <div class="col-md-8 mb-3 form-group">
+                    <label> Kargo Şirketi </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-solid fa-truck"></i></span>
+                        </div>
+                        <select placeholder="Kargo Şirketi Seçiniz." name="CargoCompanyIds[]" class="form-control selectBoxForShipping" data-row-id="1" required></select>
+                    </div>
+                </div>
+                <div class="col-md-8 mb-3 categories">
+                    <label> Kategori </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                        </div>
+                        <select placeholder="Kategori Seçiniz." name="CategoryIds[]" class="form-control selectBoxForCategory" data-row-id="1" required></select>
+                    </div>
+                </div>
+
+            </div>
+            @*Add Product and New Line Buttons*@
+            <div class="row  d-flex justify-content-end">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-outline-primary submit" id="submit">
+                            Kaydet
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+
+
+    $(document).ready(function() {
+        function Select2Prepare() {
+            $(".selectBoxForSelectProducts").select2({
+                ajax: {
+                    url: "/Product/GetProducts",
+                    type: "get",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            searchWord: params.term
+                        }
+                    },
+                    processResults: function(response) {
+
+                        var result = $.map(response, function(item) {
+
+                            return {
+                                id: item.productId,
+                                text: item.productName
+                            };
+                        })
+                        return {
+                            results: result
+                        }
+                    },
+                    cache: true
+                }
+            });
+        }
+        Select2Prepare()
+    })
+
+
+
+
+
+
+</script>

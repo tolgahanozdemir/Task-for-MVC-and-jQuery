@@ -8,50 +8,7 @@
 
 @section Header{
     <style>
-        .input-group > .select2-container--bootstrap {
-            width: auto;
-            flex: 1 1 auto;
-        }
 
-            .input-group > .select2-container--bootstrap .select2-selection--single {
-                height: 100%;
-                line-height: inherit;
-                padding: 0.5rem 1rem;
-            }
-
-        .input-group > .select2-container--bootstrap, .input-group > .select2-container--default {
-            width: auto;
-            flex: 1 1 auto;
-        }
-
-            .input-group > .select2-container--bootstrap .select2-selection--single,
-            .input-group > .select2-container--default .select2-selection--single,
-            .input-group > .select2-container--bootstrap .select2-selection--multiple,
-            .input-group > .select2-container--default .select2-selection--multiple {
-                height: 100%;
-                line-height: inherit;
-                border-radius: 4px 0 0 4px;
-            }
-
-                .input-group > .select2-container--bootstrap .select2-selection--single .select2-selection__rendered,
-                .input-group > .select2-container--default .select2-selection--single .select2-selection__rendered,
-                .input-group > .select2-container--bootstrap .select2-selection--multiple .select2-selection__rendered,
-                .input-group > .select2-container--default .select2-selection--multiple .select2-selection__rendered {
-                    height: inherit;
-                    display: -webkit-box !important;
-                    display: -ms-flexbox !important;
-                    display: flex !important;
-                    -webkit-box-align: center !important;
-                    -ms-flex-align: center !important;
-                    align-items: center !important;
-                }
-
-                .input-group > .select2-container--bootstrap .select2-selection--single .select2-selection__arrow,
-                .input-group > .select2-container--default .select2-selection--single .select2-selection__arrow,
-                .input-group > .select2-container--bootstrap .select2-selection--multiple .select2-selection__arrow,
-                .input-group > .select2-container--default .select2-selection--multiple .select2-selection__arrow {
-                    height: inherit;
-                }
     </style>
 }
 
@@ -141,9 +98,7 @@
                                 Satır Ekle
                             </div>
                         </div>
-
                     </div>
-
                 </div>
             </div>
         </form>
@@ -151,42 +106,15 @@
 
     @section Scripts{
     <script>
-
-        function select2Prepare(selectBoxClass, controllerMethodName) {
-            $(selectBoxClass).select2({
-                ajax: {
-                    url: controllerMethodName,
-                    type: "get",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            searchWord: params.term
-                        }
-                    },
-                    processResults: function(response) {
-
-                        var result = $.map(response, function(item) {
-
-                            return {
-                                id: item.id,
-                                text: item.name
-                            };
-                        })
-                        return {
-                            results: result
-                        }
-                    },
-                    cache: true
-                }
-            });
-        }
-
         var dataRowId = 1;
 
         $(document).ready(function() {
-            select2Prepare(".selectBoxForShipping", "/ShippingCompany/GetShippingCompanies")
-            select2Prepare(".selectBoxForCategory", "/Category/GetCategories")
+            var select2ShippingClass = ".selectBoxForShipping"
+            var select2ShippingUrl = "/ShippingCompany/GetShippingCompanies"
+            var select2CategoryClass = ".selectBoxForCategory"
+            var select2CategoryUrl = "/Category/GetCategories"
+            select2forAddProd(select2ShippingClass, select2ShippingUrl)
+            select2forAddProd(select2CategoryClass, select2CategoryUrl)
         })
 
         $(".addRow").on('click', function() {
@@ -201,15 +129,15 @@
                 $(i).attr("data-row-id", dataRowId);
                 component += '<div class="col-md-8 mb-3 form-group">' +
                     labels[k].outerHTML +
-                    '<div class="input-group">'+ 
-                    '<div class="input-group-prepend">'+
+                    '<div class="input-group">' +
+                    '<div class="input-group-prepend">' +
                     '<span class="input-group-text">' +
                     spans[k].outerHTML +
                     '</span>' +
                     '</div>' +
                     i.outerHTML +
                     '</div>' +
-                    '</div>'+
+                    '</div>' +
                     '<br>';
             })
             component += '<div class="btn btn-outline-danger col-md-5 deleteRow" data-row-id="' + dataRowId + '">' +
@@ -223,10 +151,15 @@
             $(".productRow").last().find(".selectBoxForShipping").val(null).trigger('change');
             $(".productRow").last().find(".selectBoxForCategory").val(null).trigger('change');
 
-            select2Prepare(".selectBoxForShipping", "/ShippingCompany/GetShippingCompanies")
-            select2Prepare(".selectBoxForShipping", "/ShippingCompany/GetShippingCompanies")
-            select2Prepare(".selectBoxForCategory", "/Category/GetCategories")
-            select2Prepare(".selectBoxForCategory", "/Category/GetCategories")
+
+            var select2ShippingClass = ".selectBoxForShipping"
+            var select2ShippingUrl = "/ShippingCompany/GetShippingCompanies"
+            var select2CategoryClass = ".selectBoxForCategory"
+            var select2CategoryUrl = "/Category/GetCategories"
+            select2forAddProd(select2ShippingClass, select2ShippingUrl)
+            select2forAddProd(select2ShippingClass, select2ShippingUrl)
+            select2forAddProd(select2CategoryClass, select2CategoryUrl)
+            select2forAddProd(select2CategoryClass, select2CategoryUrl)
 
         });
 

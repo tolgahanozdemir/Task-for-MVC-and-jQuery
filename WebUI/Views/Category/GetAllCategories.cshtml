@@ -11,47 +11,194 @@
 
 
 
-<div class="container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">İsim</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
+    <section class="content">
+        <div class="container-fluid">
+            <div id="loading" class="spinner-grow overlay__spinner" style="display:none;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Kategorileriniz</h3>
+                        </div>
+                        <div class="card-body">
+                            <table id="example1" style="display:none;" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>İsim</th>
+                                        <th>sil knk</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <button disabled type="button" class="btn btn-danger deleteCheckedButton">Seçili Olan Ürünleri Sil</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                @{
-                    int j = 1;
-                    foreach (var item in categoryList)
-                    {
-                        <td>@j</td>
-                        <td>@item.Name</td>
-                        j++;
+
+
+
+    @section Scripts{
+    <script>
+
+        $(document).ready(function() {
+            var selectedList = 0;
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+
+            function addOnChangeCheckbox(checkbox) {
+                $(checkbox).change(function() {
+                    console.log(selectedList)
+                    if ($(this).is(":checked")) {
+
+                        selectedList++;
+                    }
+                    else {
+
+                        selectedList--;
+                    }
+                    console.log(selectedList)
+
+                    if (selectedList >= 1) {
+
+                        $(".deleteCheckedButton").prop("disabled", false)
+                    }
+                    else {
+
+                        $(".deleteCheckedButton").prop("disabled", true)
                     }
 
-                }
-
-            </tr>
-        </tbody>
-    </table>
-</div>
 
 
-
-
-@section Scripts{
-    <script>
-        $.ajax({
-            url: "/Category/GetCategories",
-            method: "GET",
-            success: function(data) {
-                console.log(data)
-                for (var i = 0; i < data.length; i++) {
-                    $('tbody').append(`<tr> <td>${(data[i].id)}</td>  <td>${(data[i].name)}</td> </tr>`)
-                }
+                })
             }
+
+
+            $.ajax({
+                url: "/Category/GetCategories",
+                method: "GET",
+                beforeSend: function() { $("#loading").show(); },
+                success: function(data) {
+                    $("#loading").hide();
+                    $("#example1").show();
+                    for (var i = 0; i < data.length; i++) {
+                        $('tbody').append(`<tr class="listViewCategories" data-row-id='${i + 1}' category-id='${data[i].id}'><td><div class="icheck-danger d-inline"><input type="checkbox" style="width:30px; height:30px;" category-id='${data[i].id}' class="deleteCategoryCheckBox"></div></td><td>${data[i].name}</td><td><div type="submit" class="btn btn-danger deleteRow submit"data-row-name='${data[i].name}'data-row-id='${(i + 1)}'>Sil</div></td></tr>`);
+                        var dataRowName = data[i].name;
+                        addDeleteOneRowFunction(".deleteRow[data-row-name='" + dataRowName + "']");
+                        addOnChangeCheckbox($("input[category-id='" + data[i].id + "'][class='deleteCategoryCheckBox']"));
+                    }
+                    $("#example1").DataTable({
+                        "responsive": true, "lengthChange": false, "autoWidth": false,
+                        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+                }
+            })    
+
         })
+
+
+        function cancelFunction() {
+            toastr.warning('Silmekten vazgeçtiniz.', 'Ürün silinmedi.')
+        }
+        function acceptFunction(deleteRowOne) {
+            var currentRowName = $(deleteRowOne).attr("data-row-name");
+
+            var currentRowId = $(deleteRowOne).attr("data-row-id");
+
+            var categoryRow = $(".listViewCategories[data-row-id='" + currentRowId + "']");
+            var categoryIdtoDelete = categoryRow.attr("category-id");
+            $.ajax({
+                url: '/Category/DeleteCategory',
+                type: 'POST',
+                dataType: 'json',
+                data: { categoryId: categoryIdtoDelete },
+                success: function(result) {
+
+                    if (result.success == true) {
+                        var deleteMessage = currentRowName + " İsimli Ürün Silindi"
+                        toastr.success(result.message, deleteMessage);
+                        categoryRow.hide('500', function() { categoryRow.remove() })
+                    }
+                    else {
+                        toastr.info(result.message, 'Information Alert');
+                    }
+                },
+                error: function(err) {
+                    toastr.error('Dat Dat Error', 'Error Alert');
+                }
+            });
+        }
+        function addDeleteOneRowFunction(thiss) {
+            var swallRowText = "ürün silinsin mi"
+            $(thiss).on('click', function() {
+                AcceptenceSwal(swallRowText, "Evet", "Hayır", function() { return acceptFunction(thiss) }, function() { return cancelFunction() })
+            })
+        }
+
+
+
+
+        $(".deleteCheckedButton").on('click', function() {
+            var swallRowText = "Seçili Ürünler Silinsin mi?"
+            AcceptenceSwal(swallRowText, "Evet", "Hayır", function() { return deleteSelectedCategoriesFunction() }, function() { return cancelFunction() })
+        })
+
+        function deleteSelectedCategoriesFunction() {
+            var selectedInputs = $("input:checked")
+            var rows = [];
+            var listToPost = [];
+            $.each(selectedInputs, function(k, i) {
+                var categoryId = $(i).attr("category-id")
+                var row = $(i).parent().parent().parent();
+                rows.push(row);
+                listToPost.push(categoryId)
+            })
+            $.ajax({
+                url: '/Category/DeleteSelectedCategories',
+                type: 'POST',
+                dataType: 'json',
+                data: { categoryIds: listToPost },
+                success: function(result) {
+
+                    if (result.success == true) {
+                        var deleteMessage = "Seçili Ürünler Silindi";
+                        var table = $("#example1").DataTable();
+                        toastr.success(result.message, deleteMessage);
+                        $.each(selectedInputs, function(k, i) {
+                            var rowsTable = table.rows(rows);
+                            rows[k].hide('500', function() { rowsTable.remove().draw(); rows[k].remove(); })
+                        })
+                    }
+                    else {
+                        toastr.info(result.message, 'Information Alert');
+                    }
+                },
+                error: function(err) {
+                    toastr.error('Dat Dat Error', 'Error Alert');
+                }
+            });
+
+        }
+
+
     </script>
 }

@@ -34,5 +34,14 @@ namespace Business.Concrete
         {
             return _categoryDal.GetAll();
         }
+        public void Delete(Category category)
+        {
+            _categoryDal.Delete(category);
+        }
+
+        public void BulkDelete(List<Category> category, Action<BulkOperation>? options)
+        {
+            _categoryDal.BulkDelete(category,options);
+        }
     }
 }

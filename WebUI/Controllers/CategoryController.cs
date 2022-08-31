@@ -79,5 +79,36 @@ namespace WebUI.Controllers
             }
             return _categoryService.GetAll();
         }
+
+        [HttpPost]
+        public JsonResult DeleteCategory(int categoryId)
+        {
+            var product = _categoryService.Get(x => x.Id == categoryId);
+            _categoryService.Delete(product);
+            return Json(new { success = true, responseText = "Deleted Scussefully" });
+        }
+
+        [HttpPost]
+        public JsonResult DeleteSelectedCategories(List<int> categoryIds)
+        {
+            List<Category> categories = new List<Category>();
+            foreach (int item in categoryIds)
+            {
+                var product = _categoryService.Get(x => x.Id == item);
+                categories.Add(product);
+            }
+            _categoryService.BulkDelete(categories, options =>
+            {
+                options.InsertIfNotExists = true;
+                options.ErrorMode = ErrorModeType.ThrowException;
+            });
+            return Json(new { success = true, responseText = "Deleted Scussefully" });
+        }
+
+
+        public IActionResult UpdateCategory()
+        {
+            return View();
+        }
     }
 }

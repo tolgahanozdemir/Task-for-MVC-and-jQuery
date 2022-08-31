@@ -114,5 +114,10 @@ namespace WebUI.Controllers
             }
             return data;
         }
+
+        public IActionResult UpdateProduct()
+        {
+            return View();
+        }
     }
 }

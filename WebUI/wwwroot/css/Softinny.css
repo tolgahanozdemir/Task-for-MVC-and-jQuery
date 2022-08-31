@@ -1,0 +1,65 @@
+﻿.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(255,255,255,0.7);
+}
+
+.overlay__wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.overlay__spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.input-group > .select2-container--bootstrap {
+    width: auto;
+    flex: 1 1 auto;
+}
+
+    .input-group > .select2-container--bootstrap .select2-selection--single {
+        height: 100%;
+        line-height: inherit;
+        padding: 0.5rem 1rem;
+    }
+
+.input-group > .select2-container--bootstrap, .input-group > .select2-container--default {
+    width: auto;
+    flex: 1 1 auto;
+}
+
+    .input-group > .select2-container--bootstrap .select2-selection--single,
+    .input-group > .select2-container--default .select2-selection--single,
+    .input-group > .select2-container--bootstrap .select2-selection--multiple,
+    .input-group > .select2-container--default .select2-selection--multiple {
+        height: 100%;
+        line-height: inherit;
+        border-radius: 4px 0 0 4px;
+    }
+
+        .input-group > .select2-container--bootstrap .select2-selection--single .select2-selection__rendered,
+        .input-group > .select2-container--default .select2-selection--single .select2-selection__rendered,
+        .input-group > .select2-container--bootstrap .select2-selection--multiple .select2-selection__rendered,
+        .input-group > .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+            height: inherit;
+            display: -webkit-box !important;
+            display: -ms-flexbox !important;
+            display: flex !important;
+            -webkit-box-align: center !important;
+            -ms-flex-align: center !important;
+            align-items: center !important;
+        }
+
+        .input-group > .select2-container--bootstrap .select2-selection--single .select2-selection__arrow,
+        .input-group > .select2-container--default .select2-selection--single .select2-selection__arrow,
+        .input-group > .select2-container--bootstrap .select2-selection--multiple .select2-selection__arrow,
+        .input-group > .select2-container--default .select2-selection--multiple .select2-selection__arrow {
+            height: inherit;
+        }
