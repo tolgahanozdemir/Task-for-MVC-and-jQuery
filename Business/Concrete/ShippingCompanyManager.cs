@@ -1,12 +1,7 @@
 ﻿using Business.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using Z.BulkOperations;
 
 namespace Business.Concrete
@@ -14,6 +9,7 @@ namespace Business.Concrete
     public class ShippingCompanyManager : IShippingCompanyService
     {
         private IShippingCompanyDal _shippingCompanyDal;
+
         public ShippingCompanyManager(IShippingCompanyDal shippingCompanyDal)
         {
             _shippingCompanyDal = shippingCompanyDal;
@@ -26,7 +22,7 @@ namespace Business.Concrete
 
         public void BulkAdd(List<ShippingCompany> shippingCompany, Action<BulkOperation>? options)
         {
-            _shippingCompanyDal.BulkAdd(shippingCompany,options);
+            _shippingCompanyDal.BulkAdd(shippingCompany, options);
         }
 
         public ShippingCompany Get(Expression<Func<ShippingCompany, bool>> filter)
@@ -37,6 +33,11 @@ namespace Business.Concrete
         public List<ShippingCompany> GetAll()
         {
             return _shippingCompanyDal.GetAll();
+        }
+
+        public ShippingCompany GetById(int id)
+        {
+            return _shippingCompanyDal.GetById(id);
         }
     }
 }

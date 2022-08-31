@@ -15,6 +15,7 @@ namespace Business.Abstract
         void BulkDelete(List<Category> category, Action<BulkOperation>? options);
         void Add(Category category);
         void Delete(Category category);
+        Category GetById(int id);
         List<Category> GetAll();
         Category Get(Expression<Func<Category, bool>> filter);
     }

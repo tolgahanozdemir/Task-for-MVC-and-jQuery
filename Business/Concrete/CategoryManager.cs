@@ -43,5 +43,10 @@ namespace Business.Concrete
         {
             _categoryDal.BulkDelete(category,options);
         }
+
+        public Category GetById(int id)
+        {
+            return _categoryDal.GetById(id);
+        }
     }
 }

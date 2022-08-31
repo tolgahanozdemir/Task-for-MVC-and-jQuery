@@ -56,5 +56,10 @@ namespace Business.Concrete
         {
             _productdal.BulkDelete(product, options);
         }
+
+        public Product GetById(int id)
+        {
+            return _productdal.GetById(id);
+        }
     }
 }

@@ -101,8 +101,8 @@ namespace WebUI.Controllers
                 var company = _shippingCompanyService.Get(x => x.Id == item.ShippingId);
                 ProductModelForListProducts product = new ProductModelForListProducts
                 {
-                    ProductId = item.Id,
-                    ProductName = item.Name,
+                    Id = item.Id,
+                    Name = item.Name,
                     PurchasePrice = item.PurchasePrice,
                     SalePrice = item.SellingPrice,
                     Description = item.Description,
@@ -117,6 +117,49 @@ namespace WebUI.Controllers
 
         public IActionResult UpdateProduct()
         {
+            return View();
+        }
+        public ProductModelForListProducts GetProductForUpdate(int productId)
+        {
+            var selectedProduct = _productService.GetById(productId);
+            var categoryName = _categoryService.GetById(selectedProduct.CategoryId).Name;
+            var companyName = _shippingCompanyService.GetById(selectedProduct.ShippingId).Name;
+            ProductModelForListProducts productToView = new ProductModelForListProducts
+            {
+                Id=selectedProduct.Id,
+                Name = selectedProduct.Name,
+                PurchasePrice=selectedProduct.PurchasePrice,
+                SalePrice = selectedProduct.SellingPrice,
+                Description = selectedProduct.Description,
+                Stock = selectedProduct.StockAmount,
+                CargoCompanyName = companyName,
+                CategoryName = categoryName
+            };
+            return productToView;
+        }
+        [HttpPost]
+        public IActionResult UpdateProduct(ProductModelForListProducts productToUpdate)
+        {
+            try
+            {
+                Product product = new Product
+                {
+                    Id = productToUpdate.Id,
+                    Name = productToUpdate.Name,
+                    PurchasePrice = productToUpdate.PurchasePrice,
+                    SellingPrice = productToUpdate.SalePrice,
+                    Description = productToUpdate.Description,
+                    StockAmount = productToUpdate.Stock,
+                    ShippingId = _shippingCompanyService.Get(x => x.Name == productToUpdate.CargoCompanyName).Id,
+                    CategoryId = _categoryService.Get(x => x.Name == productToUpdate.CategoryName).Id
+                };
+                _productService.Update(product);
+                ViewBag.Success = "Succesfully Inserted";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrMsg = "Failed " + ex.Message;
+            }
             return View();
         }
     }

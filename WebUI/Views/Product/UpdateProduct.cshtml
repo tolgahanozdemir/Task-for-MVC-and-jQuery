@@ -13,7 +13,7 @@
         </div>
     </div>
 
-    <form method="post" action="/Product/AddProduct">
+    <form method="post" action="/Product/UpdateProduct">
 
         <div class="container mt-5">
             <div class="row d-flex justify-content-center productRow my-5" data-row-id="1">
@@ -23,7 +23,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-solid fa-file-signature"></i></span>
                         </div>
-                        <input type="text" name="ProductNames[]" placeholder="Ürün Adı" class="form-control">
+                        <input type="text" name="ProductNames[]" placeholder="Ürün Adı" class="form-control productNameTextbox">
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -32,7 +32,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                         </div>
-                        <input type="text" name="PurchasePrices[]" placeholder="123.123" class="form-control" required />
+                        <input type="text" name="PurchasePrices[]" placeholder="123.123" class="form-control productPurchasePriceTextBox" required />
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -41,7 +41,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                         </div>
-                        <input type="text" name="SalePrices[]" placeholder="123.123" class="form-control" required />
+                        <input type="text" name="SalePrices[]" placeholder="123.123" class="form-control productSellingPriceTextBox" required />
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -50,7 +50,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-solid fa-file-signature"></i></span>
                         </div>
-                        <textarea name="Descriptions[]" placeholder="Aracın değişeni yoktur. Sadece 5 taklalıdır." class="form-control" required></textarea>
+                        <textarea name="Descriptions[]" placeholder="Aracın değişeni yoktur. Sadece 5 taklalıdır." class="form-control productDescriptionTextBox" required></textarea>
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -59,7 +59,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                         </div>
-                        <input type="text" name="Stocks[]" placeholder="123" class="form-control" required />
+                        <input type="text" name="Stocks[]" placeholder="123" class="form-control productStockAmountTextBox" required />
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -102,41 +102,32 @@
 
 
     $(document).ready(function() {
-        function Select2Prepare() {
-            $(".selectBoxForSelectProducts").select2({
-                ajax: {
-                    url: "/Product/GetProducts",
-                    type: "get",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function(params) {
-                        return {
-                            searchWord: params.term
-                        }
-                    },
-                    processResults: function(response) {
-
-                        var result = $.map(response, function(item) {
-
-                            return {
-                                id: item.productId,
-                                text: item.productName
-                            };
-                        })
-                        return {
-                            results: result
-                        }
-                    },
-                    cache: true
-                }
-            });
-        }
-        Select2Prepare()
+        Select2Prepare(".selectBoxForSelectProducts", "/Product/GetProducts")
+        Select2Prepare(".selectBoxForShipping", "/ShippingCompany/GetShippingCompanies")
+        Select2Prepare(".selectBoxForCategory", "/Category/GetCategories")
     })
+    $(".selectBoxForSelectProducts").change(function() {
+        var dataa = $(".selectBoxForSelectProducts option:selected").prop('outerHTML')
+        var productIdToController = $(dataa).attr('value')
+
+        $.ajax({
+            url: "/Product/GetProductForUpdate",
+            method: "GET",
+            dataType: 'json',
+            data: { productId: productIdToController },
+            success: function(data) {
+                $(".productNameTextbox").val(data.name)
+                $(".productPurchasePriceTextBox").val(data.purchasePrice)
+                $(".productSellingPriceTextBox").val(data.salePrice)
+                $(".productStockAmountTextBox").val(data.stock)
+                $(".productDescriptionTextBox").val(data.description)
 
 
+                var shipping = $(".selectBoxForShipping").find("li")
+                console.log(shipping)
 
-
-
+            }
+        })
+    })
 
 </script>

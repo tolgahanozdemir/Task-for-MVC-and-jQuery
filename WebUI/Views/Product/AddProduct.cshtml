@@ -113,8 +113,8 @@
             var select2ShippingUrl = "/ShippingCompany/GetShippingCompanies"
             var select2CategoryClass = ".selectBoxForCategory"
             var select2CategoryUrl = "/Category/GetCategories"
-            select2forAddProd(select2ShippingClass, select2ShippingUrl)
-            select2forAddProd(select2CategoryClass, select2CategoryUrl)
+            Select2Prepare(select2ShippingClass, select2ShippingUrl)
+            Select2Prepare(select2CategoryClass, select2CategoryUrl)
         })
 
         $(".addRow").on('click', function() {
@@ -156,10 +156,10 @@
             var select2ShippingUrl = "/ShippingCompany/GetShippingCompanies"
             var select2CategoryClass = ".selectBoxForCategory"
             var select2CategoryUrl = "/Category/GetCategories"
-            select2forAddProd(select2ShippingClass, select2ShippingUrl)
-            select2forAddProd(select2ShippingClass, select2ShippingUrl)
-            select2forAddProd(select2CategoryClass, select2CategoryUrl)
-            select2forAddProd(select2CategoryClass, select2CategoryUrl)
+            Select2Prepare(select2ShippingClass, select2ShippingUrl)
+            Select2Prepare(select2ShippingClass, select2ShippingUrl)
+            Select2Prepare(select2CategoryClass, select2CategoryUrl)
+            Select2Prepare(select2CategoryClass, select2CategoryUrl)
 
         });
 

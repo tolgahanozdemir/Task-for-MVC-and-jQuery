@@ -101,7 +101,7 @@
                     $("#loading").hide();
                     $("#example1").show();
                     for (var i = 0; i < data.length; i++) {
-                        $('tbody').append(`<tr class="listViewProducts" data-row-id='${i + 1}' product-id='${data[i].productId}'><td><div class="icheck-danger d-inline"><input type="checkbox" style="width:30px; height:30px;" product-id='${data[i].productId}' class="deleteProductCheckBox"></div></td><td>${data[i].productName}</td><td>${data[i].purchasePrice}</td><td>${data[i].salePrice}</td><td>${data[i].description}</td><td>${data[i].stock}</td><td>${data[i].cargoCompanyName}</td><td>${data[i].categoryName}</td><td><div type="submit" class="btn btn-danger deleteRow submit"data-row-name='${data[i].productName}'data-row-id='${(i + 1)}'>Sil</div></td></tr>`);
+                        $('tbody').append(`<tr class="listViewProducts" data-row-id='${i + 1}' product-id='${data[i].id}'><td><div class="icheck-danger d-inline"><input type="checkbox" style="width:30px; height:30px;" product-id='${data[i].id}' class="deleteProductCheckBox"></div></td><td>${data[i].name}</td><td>${data[i].purchasePrice}</td><td>${data[i].salePrice}</td><td>${data[i].description}</td><td>${data[i].stock}</td><td>${data[i].cargoCompanyName}</td><td>${data[i].categoryName}</td><td><div type="submit" class="btn btn-danger deleteRow submit"data-row-name='${data[i].productName}'data-row-id='${(i + 1)}'>Sil</div></td></tr>`);
 
                         var dataRowName = data[i].productName;
                         addDeleteOneRowFunction(".deleteRow[data-row-name='" + dataRowName + "']");

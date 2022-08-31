@@ -18,5 +18,6 @@ namespace Business.Abstract
         void Update(Product product);
         List<Product> GetAll();
         Product Get(Expression<Func<Product, bool>> filter);
+        Product GetById(int id);
     }
 }

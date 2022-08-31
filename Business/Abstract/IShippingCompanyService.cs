@@ -9,6 +9,7 @@ namespace Business.Abstract
         void BulkAdd(List<ShippingCompany> shippingCompany, Action<BulkOperation>? options);
 
         void Add(ShippingCompany shippingCompany);
+        ShippingCompany GetById(int id);
 
         List<ShippingCompany> GetAll();
         ShippingCompany Get(Expression<Func<ShippingCompany, bool>> filter);

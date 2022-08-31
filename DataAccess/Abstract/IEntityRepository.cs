@@ -13,6 +13,7 @@ namespace DataAccess.Abstract
     {
         List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null);
         TEntity Get(Expression<Func<TEntity, bool>> filter);
+        TEntity GetById(int id);
         void Add(TEntity entity);
         void BulkAdd(List<TEntity> entity, Action<BulkOperation>? options);
         void Update(TEntity entity);

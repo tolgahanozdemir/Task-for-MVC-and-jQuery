@@ -2,8 +2,8 @@
 {
     public class ProductModelForListProducts
     {
-        public int ProductId { get; set; }
-        public string ProductName { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
         public float PurchasePrice { get; set; }
         public float SalePrice { get; set; }
         public string Description { get; set; }
