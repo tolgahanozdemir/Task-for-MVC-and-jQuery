@@ -115,52 +115,43 @@ namespace WebUI.Controllers
             return data;
         }
 
-        public IActionResult UpdateProduct()
+        public IActionResult UpdateProduct(int id)
         {
-            return View();
-        }
-        public ProductModelForListProducts GetProductForUpdate(int productId)
-        {
-            var selectedProduct = _productService.GetById(productId);
-            var categoryName = _categoryService.GetById(selectedProduct.CategoryId).Name;
-            var companyName = _shippingCompanyService.GetById(selectedProduct.ShippingId).Name;
+            var product = _productService.GetById(id);
+
             ProductModelForListProducts productToView = new ProductModelForListProducts
             {
-                Id=selectedProduct.Id,
-                Name = selectedProduct.Name,
-                PurchasePrice=selectedProduct.PurchasePrice,
-                SalePrice = selectedProduct.SellingPrice,
-                Description = selectedProduct.Description,
-                Stock = selectedProduct.StockAmount,
-                CargoCompanyName = companyName,
-                CategoryName = categoryName
+                Id = product.Id,
+                Name = product.Name,
+                PurchasePrice= product.PurchasePrice,
+                SalePrice= product.SellingPrice,
+                Description= product.Description,
+                Stock= product.StockAmount,
+                CargoCompanyName = _shippingCompanyService.GetById(product.ShippingId).Name,
+                CategoryName = _categoryService.GetById(product.CategoryId).Name
             };
-            return productToView;
+
+            ViewBag.Message = productToView;
+            return View();
         }
         [HttpPost]
-        public IActionResult UpdateProduct(ProductModelForListProducts productToUpdate)
+        public IActionResult UpdateProduct(ProductModelForListProducts product)
         {
-            try
+            Product productToUpdate = new Product
             {
-                Product product = new Product
-                {
-                    Id = productToUpdate.Id,
-                    Name = productToUpdate.Name,
-                    PurchasePrice = productToUpdate.PurchasePrice,
-                    SellingPrice = productToUpdate.SalePrice,
-                    Description = productToUpdate.Description,
-                    StockAmount = productToUpdate.Stock,
-                    ShippingId = _shippingCompanyService.Get(x => x.Name == productToUpdate.CargoCompanyName).Id,
-                    CategoryId = _categoryService.Get(x => x.Name == productToUpdate.CategoryName).Id
-                };
-                _productService.Update(product);
-                ViewBag.Success = "Succesfully Inserted";
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrMsg = "Failed " + ex.Message;
-            }
-            return View();
+                Id=product.Id,
+                Name=product.Name,
+                SellingPrice = product.SalePrice,
+                PurchasePrice = product.PurchasePrice,
+                Description = product.Description,
+                StockAmount = product.Stock,
+                ShippingId = Convert.ToInt32(product.CargoCompanyName),
+                CategoryId = Convert.ToInt32(product.CategoryName)
+            };
+
+
+            _productService.Update(productToUpdate);
+            return View("GetAllProducts");
         }
     }
 }

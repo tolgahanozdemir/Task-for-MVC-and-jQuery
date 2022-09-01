@@ -1,18 +1,9 @@
-﻿<div id="root">
-    <div class="container mt-5">
-        <div class="row d-flex justify-content-center productRow my-5" data-row-id="1">
-            <div class="col-md-8 mb-3 categories">
-                <label> Güncellemek İstediğiniz Ürünü Seçiniz. </label>
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                    </div>
-                    <select placeholder="Kategori Seçiniz." class="form-control selectBoxForSelectProducts" data-row-id="1" required></select>
-                </div>
-            </div>
-        </div>
-    </div>
+﻿@{
+    var product = ViewBag.Message;
+}
 
+
+<div id="root">
     <form method="post" action="/Product/UpdateProduct">
 
         <div class="container mt-5">
@@ -23,7 +14,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-solid fa-file-signature"></i></span>
                         </div>
-                        <input type="text" name="ProductNames[]" placeholder="Ürün Adı" class="form-control productNameTextbox">
+                        <input type="text" name="Name" placeholder="Ürün Adı" class="form-control productNameTextbox">
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -32,7 +23,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                         </div>
-                        <input type="text" name="PurchasePrices[]" placeholder="123.123" class="form-control productPurchasePriceTextBox" required />
+                        <input type="text" name="PurchasePrice" placeholder="123.123" class="form-control productPurchasePriceTextBox" required />
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -41,7 +32,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                         </div>
-                        <input type="text" name="SalePrices[]" placeholder="123.123" class="form-control productSellingPriceTextBox" required />
+                        <input type="text" name="SalePrice" placeholder="123.123" class="form-control productSellingPriceTextBox" required />
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -50,7 +41,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-solid fa-file-signature"></i></span>
                         </div>
-                        <textarea name="Descriptions[]" placeholder="Aracın değişeni yoktur. Sadece 5 taklalıdır." class="form-control productDescriptionTextBox" required></textarea>
+                        <textarea name="Description" placeholder="Aracın değişeni yoktur. Sadece 5 taklalıdır." class="form-control productDescriptionTextBox" required>@product.Description</textarea>
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -59,7 +50,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                         </div>
-                        <input type="text" name="Stocks[]" placeholder="123" class="form-control productStockAmountTextBox" required />
+                        <input type="text" name="Stock" placeholder="123" class="form-control productStockAmountTextBox" required />
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -68,7 +59,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-solid fa-truck"></i></span>
                         </div>
-                        <select placeholder="Kargo Şirketi Seçiniz." name="CargoCompanyIds[]" class="form-control selectBoxForShipping" data-row-id="1" required></select>
+                        <select placeholder="Kargo Şirketi Seçiniz." name="CargoCompanyName" class="form-control selectBoxForShipping" data-row-id="1" required></select>
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 categories">
@@ -77,57 +68,68 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                         </div>
-                        <select placeholder="Kategori Seçiniz." name="CategoryIds[]" class="form-control selectBoxForCategory" data-row-id="1" required></select>
+                        <select placeholder="Kategori Seçiniz." name="CategoryName" class="form-control selectBoxForCategory" data-row-id="1" required></select>
                     </div>
                 </div>
-
-            </div>
-            @*Add Product and New Line Buttons*@
-            <div class="row  d-flex justify-content-end">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-outline-primary submit" id="submit">
-                            Kaydet
-                        </button>
+                <div class="row  d-flex justify-content-end">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <button style="display:none;" class="btn btn-outline-primary updateProductButton"></button>
+                        </div>
                     </div>
-
                 </div>
-
             </div>
+            <textarea name="Id" style="display:none;" class="form-control productIdTbx">@product.Id</textarea>
         </div>
     </form>
+    @*Add Product and New Line Buttons*@
+    <div class="row  d-flex justify-content-end">
+        <div class="col-md-4">
+            <div class="form-group">
+                <button class="btn btn-outline-primary fakeProductButton">
+                    Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
 
 
     $(document).ready(function() {
-        Select2Prepare(".selectBoxForSelectProducts", "/Product/GetProducts")
         Select2Prepare(".selectBoxForShipping", "/ShippingCompany/GetShippingCompanies")
         Select2Prepare(".selectBoxForCategory", "/Category/GetCategories")
+        $(".productNameTextbox").val(@product.Name)
+        $(".productPurchasePriceTextBox").val(@product.PurchasePrice)
+        $(".productSellingPriceTextBox").val(@product.SalePrice)
+        $(".productStockAmountTextBox").val(@product.Stock)
     })
-    $(".selectBoxForSelectProducts").change(function() {
-        var dataa = $(".selectBoxForSelectProducts option:selected").prop('outerHTML')
-        var productIdToController = $(dataa).attr('value')
 
-        $.ajax({
-            url: "/Product/GetProductForUpdate",
-            method: "GET",
-            dataType: 'json',
-            data: { productId: productIdToController },
-            success: function(data) {
-                $(".productNameTextbox").val(data.name)
-                $(".productPurchasePriceTextBox").val(data.purchasePrice)
-                $(".productSellingPriceTextBox").val(data.salePrice)
-                $(".productStockAmountTextBox").val(data.stock)
-                $(".productDescriptionTextBox").val(data.description)
+    $(".fakeProductButton").on('click', function() {
+        accceptenceSwal();
+    })
 
-
-                var shipping = $(".selectBoxForShipping").find("li")
-                console.log(shipping)
-
+    function accceptenceSwal() {
+        swal("Ürünü güncellemek istediğinize emin misiniz?", {
+            buttons: {
+                cancel: "Hayır",
+                catch: {
+                    text: "Evet",
+                    value: "catch",
+                },
+            },
+            icon: "warning",
+        }).then((value) => {
+            switch (value) {
+                case "catch":
+                    $('.updateProductButton').click();
+                    break;
+                default:
+                    toastr.warning('Silmekten vazgeçtiniz.', 'Ürün silinmedi.')
+                    break;
             }
-        })
-    })
+        });
 
+    }
 </script>
