@@ -1,4 +1,4 @@
-﻿namespace WebUI.ViewModels
+﻿namespace MVC.ViewModels
 {
     public class ProductViewModel
     {

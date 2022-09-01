@@ -1,10 +1,10 @@
 ﻿using Business.Abstract;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Mvc;
-using WebUI.ViewModels;
+using MVC.ViewModels;
 using Z.BulkOperations;
 
-namespace WebUI.Controllers
+namespace MVC.Controllers
 {
     public class ProductController : Controller
     {
