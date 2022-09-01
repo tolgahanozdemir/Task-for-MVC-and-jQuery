@@ -131,8 +131,7 @@ namespace WebUI.Controllers
                 CategoryName = _categoryService.GetById(product.CategoryId).Name
             };
 
-            ViewBag.Message = productToView;
-            return View();
+            return View(productToView);
         }
         [HttpPost]
         public IActionResult UpdateProduct(ProductModelForListProducts product)

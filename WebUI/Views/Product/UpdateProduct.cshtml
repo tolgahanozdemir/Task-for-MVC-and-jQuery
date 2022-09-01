@@ -1,6 +1,5 @@
-﻿@{
-    var product = ViewBag.Message;
-}
+﻿@model WebUI.ViewModels.ProductModelForListProducts;
+
 
 
 <div id="root">
@@ -14,7 +13,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-solid fa-file-signature"></i></span>
                         </div>
-                        <input type="text" name="Name" placeholder="Ürün Adı" class="form-control productNameTextbox">
+                        <input type="text" name="Name" class="form-control productNameTextbox" value="@Model.Name">
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -23,7 +22,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                         </div>
-                        <input type="text" name="PurchasePrice" placeholder="123.123" class="form-control productPurchasePriceTextBox" required />
+                        <input type="text" name="PurchasePrice" class="form-control productPurchasePriceTextBox" value="@Model.PurchasePrice" required />
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -32,7 +31,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                         </div>
-                        <input type="text" name="SalePrice" placeholder="123.123" class="form-control productSellingPriceTextBox" required />
+                        <input type="text" name="SalePrice" class="form-control productSellingPriceTextBox" value="@Model.SalePrice" required />
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -41,7 +40,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-solid fa-file-signature"></i></span>
                         </div>
-                        <textarea name="Description" placeholder="Aracın değişeni yoktur. Sadece 5 taklalıdır." class="form-control productDescriptionTextBox" required>@product.Description</textarea>
+                        <textarea name="Description" class="form-control productDescriptionTextBox" required>@Model.Description</textarea>
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -50,7 +49,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
                         </div>
-                        <input type="text" name="Stock" placeholder="123" class="form-control productStockAmountTextBox" required />
+                        <input type="text" name="Stock" placeholder="123" class="form-control productStockAmountTextBox" value="@Model.Stock" required />
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 form-group">
@@ -59,7 +58,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-solid fa-truck"></i></span>
                         </div>
-                        <select placeholder="Kargo Şirketi Seçiniz." name="CargoCompanyName" class="form-control selectBoxForShipping" data-row-id="1" required></select>
+                        <select name="CargoCompanyName" class="form-control selectBoxForShipping" data-row-id="1" required></select>
                     </div>
                 </div>
                 <div class="col-md-8 mb-3 categories">
@@ -68,7 +67,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                         </div>
-                        <select placeholder="Kategori Seçiniz." name="CategoryName" class="form-control selectBoxForCategory" data-row-id="1" required></select>
+                        <select name="CategoryName" class="form-control selectBoxForCategory" data-row-id="1" required></select>
                     </div>
                 </div>
                 <div class="row  d-flex justify-content-end">
@@ -79,7 +78,7 @@
                     </div>
                 </div>
             </div>
-            <textarea name="Id" style="display:none;" class="form-control productIdTbx">@product.Id</textarea>
+            <textarea name="Id" style="display:none;" class="form-control productIdTbx">@Model.Id</textarea>
         </div>
     </form>
     @*Add Product and New Line Buttons*@
@@ -100,36 +99,22 @@
     $(document).ready(function() {
         Select2Prepare(".selectBoxForShipping", "/ShippingCompany/GetShippingCompanies")
         Select2Prepare(".selectBoxForCategory", "/Category/GetCategories")
-        $(".productNameTextbox").val(@product.Name)
-        $(".productPurchasePriceTextBox").val(@product.PurchasePrice)
-        $(".productSellingPriceTextBox").val(@product.SalePrice)
-        $(".productStockAmountTextBox").val(@product.Stock)
+        $(".selectBoxForShippingoption[value="+@Model.CategoryName+"]").attr('selected','selected');
+        $(".selectBoxForCategory option[value="+@Model.CategoryName+"]").attr('selected','selected');
     })
 
     $(".fakeProductButton").on('click', function() {
-        accceptenceSwal();
+        var swallText = "Ürünü güncellemek istediğinize emin misiniz?"
+        AcceptenceSwal(swallText,"Evet","Hayır",function() { return updateProduct() },function() { return cancelButton() })
     })
 
-    function accceptenceSwal() {
-        swal("Ürünü güncellemek istediğinize emin misiniz?", {
-            buttons: {
-                cancel: "Hayır",
-                catch: {
-                    text: "Evet",
-                    value: "catch",
-                },
-            },
-            icon: "warning",
-        }).then((value) => {
-            switch (value) {
-                case "catch":
-                    $('.updateProductButton').click();
-                    break;
-                default:
-                    toastr.warning('Silmekten vazgeçtiniz.', 'Ürün silinmedi.')
-                    break;
-            }
-        });
-
+    function updateProduct() {
+        $('.updateProductButton').click();
     }
+    function cancelButton() {
+        toastr.warning('Silmekten vazgeçtiniz.', 'Ürün silinmedi.')
+    }
+
+
+
 </script>
