@@ -1,5 +1,5 @@
 ﻿using DataAccess.Abstract;
-using Entities.Abstract;
+using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using Z.BulkOperations;
