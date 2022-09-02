@@ -27,39 +27,38 @@ namespace MVC.Controllers
         [HttpPost]
         public IActionResult AddProduct(ProductViewModel products)
         {
+            List<Product> productsForDb = new List<Product>();
 
-            try
+            for (int i = 0; i < products.ProductNames.Count; i++)
             {
-                List<Product> productsForDb = new List<Product>();
-
-                for (int i = 0; i < products.ProductNames.Count; i++)
+                var category = _categoryService.Get(x => x.Id == Convert.ToInt32(products.CategoryIds[i]));
+                var company = _shippingCompanyService.Get(x => x.Id == Convert.ToInt32(products.CargoCompanyIds[i]));
+                Product productForList = new Product
                 {
-                    var category = _categoryService.Get(x => x.Id == Convert.ToInt32(products.CategoryIds[i]));
-                    var company = _shippingCompanyService.Get(x => x.Id == Convert.ToInt32(products.CargoCompanyIds[i]));
-                    Product productForList = new Product
-                    {
-                        Name = products.ProductNames[i],
-                        PurchasePrice = (float)products.PurchasePrices[i],
-                        SellingPrice = (float)products.SalePrices[i],
-                        Description = products.Descriptions[i],
-                        StockAmount = products.Stocks[i],
-                        ShippingId = company.Id,
-                        CategoryId = category.Id
-                    };
-                    productsForDb.Add(productForList);
-                }
-
-                _productService.BulkAdd(productsForDb, options =>
-                {
-                    options.InsertIfNotExists = true;
-                    options.ErrorMode = ErrorModeType.ThrowException;
-                });
-                ViewBag.Success = "Succesfully Inserted";
+                    Name = products.ProductNames[i],
+                    PurchasePrice = (float)products.PurchasePrices[i],
+                    SellingPrice = (float)products.SalePrices[i],
+                    Description = products.Descriptions[i],
+                    StockAmount = products.Stocks[i],
+                    ShippingId = company.Id,
+                    CategoryId = category.Id
+                };
+                productsForDb.Add(productForList);
             }
-            catch (Exception ex)
-            {
-                ViewBag.ErrMsg = "Failed " + ex.Message;
 
+
+            var result = _productService.BulkAdd(productsForDb, options =>
+            {
+                options.InsertIfNotExists = true;
+            });
+            //_productService.Add(productsForDb[0]);
+            if (result.Success)
+            {
+                ViewBag.Success = result.Message;
+            }
+            else
+            {
+                ViewBag.ErrMsg = "Failed " + result.Message;
             }
             return View();
         }
@@ -67,7 +66,7 @@ namespace MVC.Controllers
         public JsonResult DeleteProduct(int productId)
         {
             var product = _productService.Get(x => x.Id == productId);
-            _productService.Delete(product);
+            _productService.Delete(product.Data);
             return Json(new { success = true, responseText = "Deleted Scussefully" });
         }
 
@@ -78,7 +77,7 @@ namespace MVC.Controllers
             foreach (int item in productIds)
             {
                 var product = _productService.Get(x => x.Id == item);
-                products.Add(product);
+                products.Add(product.Data);
             }
             _productService.BulkDelete(products, options =>
             {
@@ -95,7 +94,7 @@ namespace MVC.Controllers
         {
             var products = _productService.GetAll();
             var data = new List<ProductModelForListProducts>();
-            foreach (var item in products)
+            foreach (var item in products.Data)
             {
                 var category = _categoryService.Get(x => x.Id == item.CategoryId);
                 var company = _shippingCompanyService.Get(x => x.Id == item.ShippingId);
@@ -121,14 +120,14 @@ namespace MVC.Controllers
 
             ProductModelForListProducts productToView = new ProductModelForListProducts
             {
-                Id = product.Id,
-                Name = product.Name,
-                PurchasePrice= product.PurchasePrice,
-                SalePrice= product.SellingPrice,
-                Description= product.Description,
-                Stock= product.StockAmount,
-                CargoCompanyName = _shippingCompanyService.GetById(product.ShippingId).Name,
-                CategoryName = _categoryService.GetById(product.CategoryId).Name
+                Id = product.Data.Id,
+                Name = product.Data.Name,
+                PurchasePrice = product.Data.PurchasePrice,
+                SalePrice = product.Data.SellingPrice,
+                Description = product.Data.Description,
+                Stock = product.Data.StockAmount,
+                CargoCompanyName = _shippingCompanyService.GetById(product.Data.ShippingId).Name,
+                CategoryName = _categoryService.GetById(product.Data.CategoryId).Name
             };
 
             return View(productToView);
@@ -138,14 +137,14 @@ namespace MVC.Controllers
         {
             Product productToUpdate = new Product
             {
-                Id=product.Id,
-                Name=product.Name,
+                Id = product.Id,
+                Name = product.Name,
                 SellingPrice = product.SalePrice,
                 PurchasePrice = product.PurchasePrice,
                 Description = product.Description,
                 StockAmount = product.Stock,
-                ShippingId = _shippingCompanyService.Get(x=>x.Name == product.CargoCompanyName).Id,
-                CategoryId = _categoryService.Get(x=>x.Name== product.CategoryName).Id
+                ShippingId = _shippingCompanyService.Get(x => x.Name == product.CargoCompanyName).Id,
+                CategoryId = _categoryService.Get(x => x.Name == product.CategoryName).Id
             };
 
 

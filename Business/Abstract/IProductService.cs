@@ -17,8 +17,8 @@ namespace Business.Abstract
         IResult Add(Product product);
         IResult Delete(Product product);
         IResult Update(Product product);
-        List<Product> GetAll();
-        Product Get(Expression<Func<Product, bool>> filter);
-        Product GetById(int id);
+        IDataResult<List<Product>> GetAll();
+        IDataResult<Product> Get(Expression<Func<Product, bool>> filter);
+        IDataResult<Product> GetById(int id);
     }
 }

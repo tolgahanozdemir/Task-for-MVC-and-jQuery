@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -19,26 +21,33 @@ namespace Business.Concrete
             _productdal = productdal;
         }
 
-        public IResult BulkAdd(List<Product> product, Action<BulkOperation>? options)
+        [ValidationAspect(typeof(ProductValidatorForBulk))]
+        public IResult BulkAdd(List<Product> products, Action<BulkOperation>? options)
         {
-            _productdal.BulkAdd(product, options);
+
+            IResult result = BusinessRules.Run(CheckIfProductNameExists(products));
+
+
+            if (result != null)
+            {
+                return result;
+            }
+
+
+            _productdal.BulkAdd(products, options);
             return new SuccessResult(Messages.ProductsAdded);
         }
 
+        [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
-
-            ValidationTool.Validate(new ProductValidator(), product);
-
             _productdal.Add(product);
             return new SuccessResult(Messages.ProductAdded);
-
-
         }
 
-        public List<Product> GetAll()
+        public IDataResult<List<Product>> GetAll()
         {
-            return _productdal.GetAll();
+            return new SuccessDataResult<List<Product>>(_productdal.GetAll(), Messages.ProductsListed);
         }
 
         public IResult Delete(Product product)
@@ -53,9 +62,9 @@ namespace Business.Concrete
             return new SuccessResult("Ürün Güncellendi.");
         }
 
-        public Product Get(Expression<Func<Product, bool>> filter)
+        public IDataResult<Product> Get(Expression<Func<Product, bool>> filter)
         {
-            return _productdal.Get(filter);
+            return new SuccessDataResult<Product>(_productdal.Get(filter));
         }
 
         public IResult BulkDelete(List<Product> product, Action<BulkOperation>? options)
@@ -64,9 +73,28 @@ namespace Business.Concrete
             return new SuccessResult("Ürünler Silindi.");
         }
 
-        public Product GetById(int id)
+        public IDataResult<Product> GetById(int id)
         {
-            return _productdal.GetById(id);
+            
+            return new SuccessDataResult<Product>(_productdal.GetById(id)) ;
+        }
+
+
+        private IResult CheckIfProductNameExists(List<Product> products)
+        {
+            var data = _productdal.GetAll();
+            for(int i = 0; i < products.Count; i++)
+            {
+                for (int j = 0; j < data.Count; j++)
+                {
+                    if (products[i].Name == data[j].Name)
+                    {
+                        return new ErrorResult("Aynı isimde 1'den fazla ürün olamaz.");
+                    }
+                }
+            }
+            
+            return new SuccessResult();
         }
     }
 }
