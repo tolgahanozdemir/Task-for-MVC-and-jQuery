@@ -29,14 +29,14 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ProductsAdded);
         }
 
-        public Category Get(Expression<Func<Category, bool>> filter)
+        public IDataResult<Category> Get(Expression<Func<Category, bool>> filter)
         {
-            return _categoryDal.Get(filter);
+            return new SuccessDataResult<Category>(_categoryDal.Get(filter));
         }
 
-        public List<Category> GetAll()
+        public IDataResult<List<Category>> GetAll()
         {
-            return _categoryDal.GetAll();
+            return new SuccessDataResult<List<Category>>(_categoryDal.GetAll());
         }
         public IResult Delete(Category category)
         {
@@ -50,9 +50,9 @@ namespace Business.Concrete
             return new SuccessResult("Ürünler Silindi.");
         }
 
-        public Category GetById(int id)
+        public IDataResult<Category> GetById(int id)
         {
-            return _categoryDal.GetById(id);
+            return new SuccessDataResult<Category>(_categoryDal.GetById(id));
         }
     }
 }

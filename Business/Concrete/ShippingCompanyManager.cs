@@ -29,19 +29,19 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ProductsAdded);
         }
 
-        public ShippingCompany Get(Expression<Func<ShippingCompany, bool>> filter)
+        public IDataResult<ShippingCompany> Get(Expression<Func<ShippingCompany, bool>> filter)
         {
-            return _shippingCompanyDal.Get(filter);
+            return new SuccessDataResult<ShippingCompany>(_shippingCompanyDal.Get(filter));
         }
 
-        public List<ShippingCompany> GetAll()
+        public IDataResult<List<ShippingCompany>> GetAll()
         {
-            return _shippingCompanyDal.GetAll();
+            return new SuccessDataResult<List<ShippingCompany>>(_shippingCompanyDal.GetAll());
         }
 
-        public ShippingCompany GetById(int id)
+        public IDataResult<ShippingCompany> GetById(int id)
         {
-            return _shippingCompanyDal.GetById(id);
+            return new SuccessDataResult<ShippingCompany>(_shippingCompanyDal.GetById(id));
         }
     }
 }

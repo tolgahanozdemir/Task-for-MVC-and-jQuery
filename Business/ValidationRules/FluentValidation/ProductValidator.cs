@@ -19,15 +19,10 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(x => x.StockAmount).NotEmpty();
             RuleFor(x => x.ShippingId).NotEmpty();
             RuleFor(x => x.CategoryId).NotEmpty();
-            RuleFor(x => x.PurchasePrice).LessThan(x => x.SellingPrice);
+            RuleFor(x => x.PurchasePrice).LessThan(x => x.SellingPrice).WithMessage("Ürünün Satış Fiyatı Alış Fiyatından Düşük Olamaz.");
             RuleFor(x => x.PurchasePrice).GreaterThan(0);
             RuleFor(x => x.SellingPrice).GreaterThan(0);
-            RuleFor(p => p.Name).Must(StartWithA).WithMessage("Ürünler A harfi ile başlamalı");
 
-        }
-        private bool StartWithA(string arg)
-        {
-            return arg.StartsWith("A");
         }
     }
 }

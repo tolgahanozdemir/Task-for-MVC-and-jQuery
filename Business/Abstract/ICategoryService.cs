@@ -16,8 +16,8 @@ namespace Business.Abstract
         IResult BulkDelete(List<Category> category, Action<BulkOperation>? options);
         IResult Add(Category category);
         IResult Delete(Category category);
-        Category GetById(int id);
-        List<Category> GetAll();
-        Category Get(Expression<Func<Category, bool>> filter);
+        IDataResult<Category> GetById(int id);
+        IDataResult<List<Category>> GetAll();
+        IDataResult<Category> Get(Expression<Func<Category, bool>> filter);
     }
 }
