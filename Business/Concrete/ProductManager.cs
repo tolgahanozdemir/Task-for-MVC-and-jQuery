@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -25,15 +27,13 @@ namespace Business.Concrete
 
         public IResult Add(Product product)
         {
-            if (product.SellingPrice > 0 && product.PurchasePrice > 0)
-            {
-                _productdal.Add(product);
-                return new SuccessResult(Messages.ProductAdded);
-            }
-            else
-            {
-                return new ErrorResult(Messages.ProductCannotAdded);
-            }
+
+            ValidationTool.Validate(new ProductValidator(), product);
+
+            _productdal.Add(product);
+            return new SuccessResult(Messages.ProductAdded);
+
+
         }
 
         public List<Product> GetAll()
