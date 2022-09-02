@@ -59,7 +59,7 @@ namespace MVC.Controllers
             {
                 searchWord = searchWord.ToLower();
                 var data = _shippingCompanyService.GetAll();
-                foreach (var item in data)
+                foreach (var item in data.Data)
                 {
                     if (item.Name.ToLower().Contains(searchWord))
                     {
@@ -69,7 +69,7 @@ namespace MVC.Controllers
                 }
                 return filteredCompanies;
             }
-            return _shippingCompanyService.GetAll();
+            return _shippingCompanyService.GetAll().Data;
         }
 
         public IActionResult GetAllShippingCompanies()

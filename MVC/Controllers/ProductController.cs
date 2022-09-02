@@ -40,8 +40,8 @@ namespace MVC.Controllers
                     SellingPrice = (float)products.SalePrices[i],
                     Description = products.Descriptions[i],
                     StockAmount = products.Stocks[i],
-                    ShippingId = company.Id,
-                    CategoryId = category.Id
+                    ShippingId = company.Data.Id,
+                    CategoryId = category.Data.Id
                 };
                 productsForDb.Add(productForList);
             }
@@ -106,8 +106,8 @@ namespace MVC.Controllers
                     SalePrice = item.SellingPrice,
                     Description = item.Description,
                     Stock = item.StockAmount,
-                    CargoCompanyName = company.Name,
-                    CategoryName = category.Name
+                    CargoCompanyName = company.Data.Name,
+                    CategoryName = category.Data.Name
                 };
                 data.Add(product);
             }
@@ -126,8 +126,8 @@ namespace MVC.Controllers
                 SalePrice = product.Data.SellingPrice,
                 Description = product.Data.Description,
                 Stock = product.Data.StockAmount,
-                CargoCompanyName = _shippingCompanyService.GetById(product.Data.ShippingId).Name,
-                CategoryName = _categoryService.GetById(product.Data.CategoryId).Name
+                CargoCompanyName = _shippingCompanyService.GetById(product.Data.ShippingId).Data.Name,
+                CategoryName = _categoryService.GetById(product.Data.CategoryId).Data.Name
             };
 
             return View(productToView);
@@ -143,8 +143,8 @@ namespace MVC.Controllers
                 PurchasePrice = product.PurchasePrice,
                 Description = product.Description,
                 StockAmount = product.Stock,
-                ShippingId = _shippingCompanyService.Get(x => x.Name == product.CargoCompanyName).Id,
-                CategoryId = _categoryService.Get(x => x.Name == product.CategoryName).Id
+                ShippingId = _shippingCompanyService.Get(x => x.Name == product.CargoCompanyName).Data.Id,
+                CategoryId = _categoryService.Get(x => x.Name == product.CategoryName).Data.Id
             };
 
 

@@ -67,7 +67,7 @@ namespace MVC.Controllers
             {
                 searchWord = searchWord.ToLower();
                 var data = _categoryService.GetAll();
-                foreach (var item in data)
+                foreach (var item in data.Data)
                 {
                     if (item.Name.ToLower().Contains(searchWord))
                     {
@@ -77,14 +77,14 @@ namespace MVC.Controllers
                 }
                 return filteredCategories;
             }
-            return _categoryService.GetAll();
+            return _categoryService.GetAll().Data;
         }
 
         [HttpPost]
         public JsonResult DeleteCategory(int categoryId)
         {
             var product = _categoryService.Get(x => x.Id == categoryId);
-            _categoryService.Delete(product);
+            _categoryService.Delete(product.Data);
             return Json(new { success = true, responseText = "Deleted Scussefully" });
         }
 
@@ -95,7 +95,7 @@ namespace MVC.Controllers
             foreach (int item in categoryIds)
             {
                 var product = _categoryService.Get(x => x.Id == item);
-                categories.Add(product);
+                categories.Add(product.Data);
             }
             _categoryService.BulkDelete(categories, options =>
             {
