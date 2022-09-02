@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System.Linq.Expressions;
@@ -15,20 +17,22 @@ namespace Business.Concrete
             _productdal = productdal;
         }
 
-        public void BulkAdd(List<Product> product, Action<BulkOperation>? options)
+        public IResult BulkAdd(List<Product> product, Action<BulkOperation>? options)
         {
             _productdal.BulkAdd(product, options);
+            return new SuccessResult(Messages.ProductsAdded);
         }
 
-        public void Add(Product product)
+        public IResult Add(Product product)
         {
             if (product.SellingPrice > 0 && product.PurchasePrice > 0)
             {
                 _productdal.Add(product);
+                return new SuccessResult(Messages.ProductAdded);
             }
             else
             {
-                throw new Exception("Tüm alanlar doldurulmak zorundadır.");
+                return new ErrorResult(Messages.ProductCannotAdded);
             }
         }
 
@@ -37,14 +41,16 @@ namespace Business.Concrete
             return _productdal.GetAll();
         }
 
-        public void Delete(Product product)
+        public IResult Delete(Product product)
         {
             _productdal.Delete(product);
+            return new SuccessResult("Ürün Silindi.");
         }
 
-        public void Update(Product product)
+        public IResult Update(Product product)
         {
             _productdal.Update(product);
+            return new SuccessResult("Ürün Güncellendi.");
         }
 
         public Product Get(Expression<Func<Product, bool>> filter)
@@ -52,9 +58,10 @@ namespace Business.Concrete
             return _productdal.Get(filter);
         }
 
-        public void BulkDelete(List<Product> product, Action<BulkOperation>? options)
+        public IResult BulkDelete(List<Product> product, Action<BulkOperation>? options)
         {
             _productdal.BulkDelete(product, options);
+            return new SuccessResult("Ürünler Silindi.");
         }
 
         public Product GetById(int id)

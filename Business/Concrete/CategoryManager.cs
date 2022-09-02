@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System.Linq.Expressions;
@@ -15,14 +17,16 @@ namespace Business.Concrete
             _categoryDal = categoryDal;
         }
 
-        public void Add(Category category)
+        public IResult Add(Category category)
         {
             _categoryDal.Add(category);
+            return new SuccessResult(Messages.ProductAdded);
         }
 
-        public void BulkAdd(List<Category> category, Action<BulkOperation>? options)
+        public IResult BulkAdd(List<Category> category, Action<BulkOperation>? options)
         {
             _categoryDal.BulkAdd(category, options);
+            return new SuccessResult(Messages.ProductsAdded);
         }
 
         public Category Get(Expression<Func<Category, bool>> filter)
@@ -34,14 +38,16 @@ namespace Business.Concrete
         {
             return _categoryDal.GetAll();
         }
-        public void Delete(Category category)
+        public IResult Delete(Category category)
         {
             _categoryDal.Delete(category);
+            return new SuccessResult("Ürün Silindi.");
         }
 
-        public void BulkDelete(List<Category> category, Action<BulkOperation>? options)
+        public IResult BulkDelete(List<Category> category, Action<BulkOperation>? options)
         {
             _categoryDal.BulkDelete(category,options);
+            return new SuccessResult("Ürünler Silindi.");
         }
 
         public Category GetById(int id)

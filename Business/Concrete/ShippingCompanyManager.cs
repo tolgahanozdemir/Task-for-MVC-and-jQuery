@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System.Linq.Expressions;
@@ -15,14 +17,16 @@ namespace Business.Concrete
             _shippingCompanyDal = shippingCompanyDal;
         }
 
-        public void Add(ShippingCompany shippingCompany)
+        public IResult Add(ShippingCompany shippingCompany)
         {
             _shippingCompanyDal.Add(shippingCompany);
+            return new SuccessResult(Messages.ProductAdded);
         }
 
-        public void BulkAdd(List<ShippingCompany> shippingCompany, Action<BulkOperation>? options)
+        public IResult BulkAdd(List<ShippingCompany> shippingCompany, Action<BulkOperation>? options)
         {
             _shippingCompanyDal.BulkAdd(shippingCompany, options);
+            return new SuccessResult(Messages.ProductsAdded);
         }
 
         public ShippingCompany Get(Expression<Func<ShippingCompany, bool>> filter)

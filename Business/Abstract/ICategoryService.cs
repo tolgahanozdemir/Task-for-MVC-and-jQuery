@@ -1,4 +1,5 @@
-﻿using Entities.Concrete;
+﻿using Core.Utilities.Results;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,10 @@ namespace Business.Abstract
 {
     public interface ICategoryService
     {
-        void BulkAdd(List<Category> category, Action<BulkOperation>? options);
-        void BulkDelete(List<Category> category, Action<BulkOperation>? options);
-        void Add(Category category);
-        void Delete(Category category);
+        IResult BulkAdd(List<Category> category, Action<BulkOperation>? options);
+        IResult BulkDelete(List<Category> category, Action<BulkOperation>? options);
+        IResult Add(Category category);
+        IResult Delete(Category category);
         Category GetById(int id);
         List<Category> GetAll();
         Category Get(Expression<Func<Category, bool>> filter);

@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Business", "Business\Busine
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MVC", "MVC\MVC.csproj", "{24EE38A2-7BBB-465F-9B8E-E1BA75D747A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{F11A9245-BEA0-48BA-94BC-B7FE06072510}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{24EE38A2-7BBB-465F-9B8E-E1BA75D747A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24EE38A2-7BBB-465F-9B8E-E1BA75D747A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24EE38A2-7BBB-465F-9B8E-E1BA75D747A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F11A9245-BEA0-48BA-94BC-B7FE06072510}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F11A9245-BEA0-48BA-94BC-B7FE06072510}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F11A9245-BEA0-48BA-94BC-B7FE06072510}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F11A9245-BEA0-48BA-94BC-B7FE06072510}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
