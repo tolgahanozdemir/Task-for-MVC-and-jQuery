@@ -144,8 +144,8 @@ namespace MVC.Controllers
                 PurchasePrice = product.PurchasePrice,
                 Description = product.Description,
                 StockAmount = product.Stock,
-                ShippingId = Convert.ToInt32(product.CargoCompanyName),
-                CategoryId = Convert.ToInt32(product.CategoryName)
+                ShippingId = _shippingCompanyService.Get(x=>x.Name == product.CargoCompanyName).Id,
+                CategoryId = _categoryService.Get(x=>x.Name== product.CategoryName).Id
             };
 
 

@@ -19,9 +19,9 @@
                         text: item.name
                     };
                 })
-                return {
-                    results: result
-                }
+                //return {
+                //    results: result
+                //}
             },
             cache: true
         }
