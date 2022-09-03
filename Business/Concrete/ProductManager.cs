@@ -47,6 +47,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ProductAdded);
         }
 
+        //[SecuredOperation("product.add,admin")]
         public IDataResult<List<Product>> GetAll()
         {
             return new SuccessDataResult<List<Product>>(_productdal.GetAll(), Messages.ProductsListed);
