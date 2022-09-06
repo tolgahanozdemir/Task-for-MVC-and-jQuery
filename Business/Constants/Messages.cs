@@ -15,6 +15,6 @@ namespace Business.Constants
         public static string ProductNameInvalid = "Ürün ismi geçersiz";
         public static string ProductsListed = "Ürünler listelendi";
         public static string ProductNameAlreadyExists = "Bu isimde zaten başka bir ürün var";
-        public static string AuthorizationDenied = "Hoop Hemşerim Nereye???";
+        public static string AuthorizationDenied = "Hoop Hemşerim Nereye Bi Login Olaydın Bari Aq???";
     }
 }

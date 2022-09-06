@@ -3,7 +3,6 @@ using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
-using Core.CrossCuttingConcerns.Validation;
 using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -25,15 +24,12 @@ namespace Business.Concrete
         [ValidationAspect(typeof(ProductValidatorForBulk))]
         public IResult BulkAdd(List<Product> products, Action<BulkOperation>? options)
         {
-
             IResult result = BusinessRules.Run(CheckIfProductNameExists(products));
-
 
             if (result != null)
             {
                 return result;
             }
-
 
             _productdal.BulkAdd(products, options);
             return new SuccessResult(Messages.ProductsAdded);
@@ -47,7 +43,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ProductAdded);
         }
 
-        //[SecuredOperation("product.add,admin")]
+        //[SecuredOperation("moderator")]
         public IDataResult<List<Product>> GetAll()
         {
             return new SuccessDataResult<List<Product>>(_productdal.GetAll(), Messages.ProductsListed);
@@ -59,6 +55,7 @@ namespace Business.Concrete
             return new SuccessResult("Ürün Silindi.");
         }
 
+        [ValidationAspect(typeof(ProductValidator))]
         public IResult Update(Product product)
         {
             _productdal.Update(product);
@@ -78,15 +75,13 @@ namespace Business.Concrete
 
         public IDataResult<Product> GetById(int id)
         {
-            
-            return new SuccessDataResult<Product>(_productdal.GetById(id)) ;
+            return new SuccessDataResult<Product>(_productdal.GetById(id));
         }
-
 
         private IResult CheckIfProductNameExists(List<Product> products)
         {
             var data = _productdal.GetAll();
-            for(int i = 0; i < products.Count; i++)
+            for (int i = 0; i < products.Count; i++)
             {
                 for (int j = 0; j < data.Count; j++)
                 {
@@ -96,7 +91,7 @@ namespace Business.Concrete
                     }
                 }
             }
-            
+
             return new SuccessResult();
         }
     }

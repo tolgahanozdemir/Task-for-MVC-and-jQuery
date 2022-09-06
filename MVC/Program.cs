@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Business.DependencyResolvers.Autofac;
+using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,8 +15,9 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     });
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-ConfigurationManager configuration = builder.Configuration;
+IConfiguration configuration = builder.Configuration;
 
+builder.Services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor, Microsoft.AspNetCore.Http.HttpContextAccessor>();
 
 var tokenOptions = configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
@@ -33,6 +35,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
         };
     });
+ServiceTool.Create(builder.Services);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
