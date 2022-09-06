@@ -16,5 +16,6 @@ namespace Business.Constants
         public static string ProductsListed = "Ürünler listelendi";
         public static string ProductNameAlreadyExists = "Bu isimde zaten başka bir ürün var";
         public static string AuthorizationDenied = "Hoop Hemşerim Nereye Bi Login Olaydın Bari Aq???";
+        public static string UserCreated = "Kullanıcı oluşturuldu.";
     }
 }

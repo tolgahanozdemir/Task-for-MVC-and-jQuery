@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "";
+}
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/css/loginPage.css" rel="stylesheet" />
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+        crossorigin="anonymous"></script>
+<head>
+
+
+</head>
+
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+        <!-- Icon -->
+        <div class="fadeIn first">
+            <img src="~/img/softinnyLogo.jpg" id="icon" />
+        </div>
+
+        <!-- Login Form -->
+        <form method="post" action="/Auth/Register">
+            <input type="text" name="FirstName" placeholder="İsim" class="form-control fadeIn first">
+            <input type="text" id="LastName" name="LastName" class="fadeIn second" placeholder="Soyisim">
+            <input type="text" id="Email" name="Email" class="fadeIn second" placeholder="E Posta">
+            <input type="text" id="Password" name="Password" class="fadeIn third" placeholder="Şifre">
+            <input type="submit" id="submit" class="fadeIn fourth loginButton" value="Kayıt Ol">
+        </form>
+        
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+            <a class="underlineHover" href="#">Şifremi Unuttum</a>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+</script>
