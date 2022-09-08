@@ -1,4 +1,4 @@
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Business.Abstract;
 using Business.Concrete;
@@ -7,6 +7,7 @@ using Core.Entities.Concrete;
 using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -26,9 +27,24 @@ ServiceTool.Create(builder.Services);
 builder.Services.AddTransient<ITokenHelper, JwtHelper>();
 builder.Services.AddTransient<IAuthService, AuthManager>();
 var tokenOptions = configuration.GetSection("TokenOptions").Get<TokenOptions>();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+//})
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+      .AddCookie(opts =>
+      {
+          opts.Cookie.Name = $"Bearer";   // todo : değiştirin.
+          opts.AccessDeniedPath = "/Home/AccessDenied";
+          opts.LoginPath = "/Auth/Login";
+          opts.SlidingExpiration = true;
+      })
     .AddJwtBearer(options =>
     {
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -40,6 +56,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
         };
     });
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = $"Bearer"; // todo : değiştirin.
+    options.IdleTimeout = TimeSpan.FromMinutes(180);
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 

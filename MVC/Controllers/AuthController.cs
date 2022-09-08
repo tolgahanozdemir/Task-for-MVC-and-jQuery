@@ -1,14 +1,15 @@
 ﻿using Business.Abstract;
-using Business.Constants;
-using Core.Entities.Concrete;
 using Entities.Concrete.DTOs;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 
 namespace MVC.Controllers
 {
+    //[Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
     public class AuthController : Controller
     {
         private IAuthService _authService;
@@ -26,6 +27,10 @@ namespace MVC.Controllers
             return View();
         }
         public IActionResult Register()
+        {
+            return View();
+        }
+        public IActionResult ForgotPassword()
         {
             return View();
         }
@@ -51,9 +56,10 @@ namespace MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(UserForLoginDto userForLoginDto)
+        public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
             var userToLogin = _authService.Login(userForLoginDto);
+            var userClaims = _userService.GetClaims(userToLogin.Data);
             if (!userToLogin.Success)
             {
                 ViewBag.ErrMsg = userToLogin.Message;
@@ -63,11 +69,33 @@ namespace MVC.Controllers
             var result = _authService.CreateAccessToken(userToLogin.Data);
             if (result.Success)
             {
+                List<Claim> claims = new List<Claim> {
+                        new Claim(userForLoginDto.Email,userToLogin.Data.Email),
+                };
+                
+                claims.AddRange(userClaims.Select(x=> new Claim(x.Id.ToString(),x.Name)));
+
+                var identity = new ClaimsIdentity(claims,
+                  JwtBearerDefaults.AuthenticationScheme);
+                
+
+
+
+                await _httpContextAccessor.HttpContext.SignInAsync(
+                  CookieAuthenticationDefaults.AuthenticationScheme,
+                  new ClaimsPrincipal(identity));
+
                 return View("../Home/Homepage");
             }
 
             ViewBag.ErrMsg = result.Message;
             return View();
+        }
+        [HttpPost]
+        public IActionResult ForgotPassword(string email)
+        {
+            ViewBag.Success = "Email hesabınız doğru ise hesabınıza mail gönderilecektir.";
+            return View("../Auth/Login");
         }
     }
 }

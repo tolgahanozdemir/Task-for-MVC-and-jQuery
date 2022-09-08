@@ -43,7 +43,7 @@ namespace Business.Concrete
             return new SuccessResult(Messages.ProductAdded);
         }
 
-        //[SecuredOperation("moderator")]
+        [SecuredOperation("moderator")]
         public IDataResult<List<Product>> GetAll()
         {
             return new SuccessDataResult<List<Product>>(_productdal.GetAll(), Messages.ProductsListed);
