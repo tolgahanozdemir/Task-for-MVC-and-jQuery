@@ -7,6 +7,7 @@ using Entities.Concrete.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,14 +44,9 @@ namespace Business.Concrete
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
             var userToCheck = _userService.GetByMail(userForLoginDto.Email);
-            if (userToCheck == null)
+            if (userToCheck == null || !HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
             {
-                return new ErrorDataResult<User>("Kullanıcı bulunamadı");
-            }
-
-            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
-            {
-                return new ErrorDataResult<User>("Parola hatası");
+                return new ErrorDataResult<User>("Kullanıcı Adı veya Parola Yanlış.");
             }
 
             return new SuccessDataResult<User>(userToCheck, "Başarılı giriş");
@@ -69,6 +65,7 @@ namespace Business.Concrete
         {
             var claims = _userService.GetClaims(user);
             var accessToken = _tokenHelper.CreateToken(user, claims);
+
             return new SuccessDataResult<AccessToken>(accessToken, "Token oluşturuldu");
         }
     }

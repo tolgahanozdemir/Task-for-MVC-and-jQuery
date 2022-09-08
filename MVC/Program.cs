@@ -1,6 +1,9 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Business.Abstract;
+using Business.Concrete;
 using Business.DependencyResolvers.Autofac;
+using Core.Entities.Concrete;
 using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT;
@@ -15,12 +18,14 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     });
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddCors();
 IConfiguration configuration = builder.Configuration;
-
-builder.Services.AddSingleton<Microsoft.AspNetCore.Http.IHttpContextAccessor, Microsoft.AspNetCore.Http.HttpContextAccessor>();
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+ServiceTool.Create(builder.Services);
+//builder.Services.AddTransient<AuthManager>();
+builder.Services.AddTransient<ITokenHelper, JwtHelper>();
+builder.Services.AddTransient<IAuthService, AuthManager>();
 var tokenOptions = configuration.GetSection("TokenOptions").Get<TokenOptions>();
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -35,7 +40,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
         };
     });
-ServiceTool.Create(builder.Services);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,8 +50,10 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+app.UseCors(x => x.SetIsOriginAllowed(origin => true).AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();

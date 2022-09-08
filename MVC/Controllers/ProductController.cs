@@ -51,7 +51,6 @@ namespace MVC.Controllers
             {
                 options.InsertIfNotExists = true;
             });
-            //_productService.Add(productsForDb[0]);
             if (result.Success)
             {
                 ViewBag.Success = result.Message;
@@ -146,8 +145,6 @@ namespace MVC.Controllers
                 ShippingId = _shippingCompanyService.Get(x => x.Name == product.CargoCompanyName).Data.Id,
                 CategoryId = _categoryService.Get(x => x.Name == product.CategoryName).Data.Id
             };
-
-
             _productService.Update(productToUpdate);
             return View("GetAllProducts");
         }

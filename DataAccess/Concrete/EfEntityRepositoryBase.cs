@@ -14,8 +14,8 @@ namespace DataAccess.Concrete
         {
             using (TContext context = new TContext())
             {
-                var addedEntity = context.AddAsync(entity);
-                context.SaveChangesAsync();
+                var addedEntity = context.Add(entity);
+                context.SaveChanges();
             }
         }
 

@@ -3,10 +3,7 @@
 }
 <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="~/css/loginPage.css" rel="stylesheet" />
-<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.1.min.js"
-        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-        crossorigin="anonymous"></script>
+
 <head>
 
 
@@ -25,18 +22,44 @@
             <input type="text" name="FirstName" placeholder="İsim" class="form-control fadeIn first">
             <input type="text" id="LastName" name="LastName" class="fadeIn second" placeholder="Soyisim">
             <input type="text" id="Email" name="Email" class="fadeIn second" placeholder="E Posta">
-            <input type="text" id="Password" name="Password" class="fadeIn third" placeholder="Şifre">
+            <input type="password" id="Password" name="Password" class="fadeIn third" placeholder="Şifre">
             <input type="submit" id="submit" class="fadeIn fourth loginButton" value="Kayıt Ol">
         </form>
         
         <!-- Remind Passowrd -->
         <div id="formFooter">
-            <a class="underlineHover" href="#">Şifremi Unuttum</a>
+            <a class="underlineHover" href="/Auth/Login">Giriş Yap</a>
         </div>
 
     </div>
 </div>
 
 
-<script>
-</script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+@if (@ViewBag.Success != null)
+{
+    <script>
+        swal({
+
+            title: "İşlem Başarılı",
+            text: "@Html.Raw(@ViewBag.Success)",
+            icon: "success"
+        });
+
+    </script>
+}
+@if (@ViewBag.ErrMsg != null)
+{
+    <script>
+        swal({
+
+            title: "HATA",
+            text: "@Html.Raw(@ViewBag.ErrMsg)",
+            icon: "error"
+        });
+    </script>
+}

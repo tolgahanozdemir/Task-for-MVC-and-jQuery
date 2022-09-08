@@ -3,10 +3,6 @@
 }
 <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="~/css/loginPage.css" rel="stylesheet" />
-<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.1.min.js"
-        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-        crossorigin="anonymous"></script>
 <head>
 
 
@@ -21,13 +17,12 @@
         </div>
 
         <!-- Login Form -->
-        <form>
-            <input type="text" id="login" class="fadeIn second" name="login" placeholder="Kullanıcı Adı">
-            <input type="text" id="password" class="fadeIn third" name="login" placeholder="Şifre">
-            <input type="submit" class="fadeIn fourth col-md-10 " value="Giriş Yap">
-            <label class="fadeIn fourth registerButton">Hala üye değil misin? <a href="/Auth/Register" >Kayıt Ol</a></label>
-            
+        <form method="post" action="/Auth/Login">
+            <input type="text" id="login" class="fadeIn second" name="Email" placeholder="E Posta">
+            <input type="password" id="password" class="fadeIn third" name="Password" placeholder="Şifre">
+            <input type="submit" class="fadeIn fourth col-md-10 " value="Giriş Yap">                       
         </form>
+        <label class="fadeIn fourth registerButton">Hala üye değil misin? <a href="/Auth/Register" >Kayıt Ol</a></label>
 
         <!-- Remind Passowrd -->
         <div id="formFooter">
@@ -37,6 +32,31 @@
     </div>
 </div>
 
-<script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-</script>
+@if (@ViewBag.Success != null)
+{
+    <script>
+        swal({
+
+            title: "İşlem Başarılı",
+            text: "@Html.Raw(@ViewBag.Success)",
+            icon: "success"
+        });
+
+    </script>
+}
+@if (@ViewBag.ErrMsg != null)
+{
+    <script>
+        swal({
+
+            title: "HATA",
+            text: "@Html.Raw(@ViewBag.ErrMsg)",
+            icon: "error"
+        });
+    </script>
+}
